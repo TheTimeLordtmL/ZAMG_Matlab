@@ -1,13 +1,6 @@
 function setting = getSettingsABS()
 %// settings for showABSwaveforms.m
 
-%setting.db.events = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
-%setting.db.events = '/net/zagsun17/export/home/seismo/antelope/db/zagsun17';
-setting.db.events = '/net/zagmac1/Volumes/Daten/seismo/antelope/basalt_db/basalt';
-%setting.db.events = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1';
-%setting.db.aec = '/net/zagmac1/Volumes/Daten/antelope/db/zagmac1';
-%setting.db.aec = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
-%setting.db.events = '/net/zagsun17/export/home/seismo/antelope/db/SEISMO_2004';
 setting.db.calib = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1';
 setting.evid = 52514440;   setting.pathDBinout = '/home/hausmann/PGA_dbwfmeas';
 setting.plot.valmarker1 = 8; setting.plot.plotstatnames = 1;
@@ -27,17 +20,17 @@ switch setting.intitialunit
     case 'A'
         setting.comp{1} = 'HNZ'; setting.comp{2} = 'HNN'; setting.comp{3} = 'HNE';
         %setting.station = 'CONA'; %HN*
-         setting.station = 'CSNA'; %HN*
+         %setting.station = 'CSNA'; %HN*
          %setting.station = 'SOKA'; %HN*
          %setting.station = 'ABTA'; %HN*
          %setting.station = 'MYKA'; %HN*
          
          %setting.station = 'ABSI'; %HN* 
-         %setting.station = 'WIWA'; %HN* 
-        % setting.station = 'SNWA'; %HN* 
+        % setting.station = 'WIWA'; %HN* 
+         %setting.station = 'SNWA'; %HN* 
         % setting.station = 'KMWA'; %HN* 
-       %  setting.station = 'UMWA'; %HN* 
-         %setting.station = 'BGWA'; %HN* 
+        setting.station = 'UMWA'; %HN* 
+        % setting.station = 'BGWA'; %HN* 
         %setting.station = 'KRUC'; %HN* 
         
         %setting.comp{1} = 'HLZ'; setting.comp{2} = 'HLN'; setting.comp{3} = 'HLE';
@@ -65,11 +58,12 @@ setting.dbqueryStr1 = sprintf('%s:%s,%s:%s,%s:%s',setting.station,setting.comp{1
 %setting.time.start = '_2013-03-14 11:16:30_';  setting.time.end ='_2013-03-14 11:18:00_'; setting.nameevent='Molln sm sr? M2.1 2013';
 %setting.time.start = '_2012-03-22 22:53:15_';  setting.time.end ='_2012-03-22 22:54:45_'; setting.nameevent='Felssturz Alpltal';
 
+%setting.time.start = '_2013-02-02 13:36:06_';  setting.time.end ='_2013-02-02 13:37:30_'; setting.nameevent='Bad Eisenkappel M4.4 2013_strong';
 %setting.time.start = '_2013-02-02 13:35:25_';  setting.time.end ='_2013-02-02 13:37:25_'; setting.nameevent='Bad Eisenkappel M4.4 2013';
 %setting.time.start = '_2013-06-05 18:45:40_';  setting.time.end ='_2013-06-05 18:49:00_'; setting.nameevent='HungARY 3.6';
-%setting.time.start = '_2013-10-02 17:17:30_';  setting.time.end ='_2013-10-02 17:19:20_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
-setting.time.start = '_2013-09-20 02:06:35_';  setting.time.end ='_2013-09-20 02:07:40_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
-
+setting.time.start = '_2013-10-02 17:17:39_';  setting.time.end ='_2013-10-02 17:18:30_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
+%setting.time.start = '_2013-09-20 02:06:35_';  setting.time.end ='_2013-09-20 02:07:40_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
+%setting.time.start = '_2013-01-25 07:14:41_';  setting.time.end ='_2013-01-25 07:15:15_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
 %setting.time.start = '_2012-08-25 12:47:00_';  setting.time.end ='_2012-08-25 12:47:53_'; setting.nameevent='Fliegerbombe 2012';
 
 %setting.time.start = '_2012-12-06 19:22:02_';  setting.time.end =  '_2012-12-06 19:22:34_'; setting.nameevent='Testbeben Tirol';
@@ -87,22 +81,36 @@ if setting.intitialunit=='A'
 end
 
 %// TWO STATION analysis
+setting.showTwoStationData = 0;
 setting.time.start1 = '_2013-09-20 02:06:32_';  setting.time.end1 ='_2013-09-20 02:07:32_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
 setting.intitialunit1 = setting.intitialunit;  
 setting.unit.value1 = setting.unit.value;
 setting.twostation.showdisplacement = 0;  %show waveforms in displacement
+%setting.comp1{1} = 'HHZ'; setting.comp1{2} = 'HHN'; setting.comp1{3} = 'HHE';
 setting.comp1{1} = 'HNZ'; setting.comp1{2} = 'HNN'; setting.comp1{3} = 'HNE';
-setting.station1 = 'BGWA';  %HH*
+setting.station1 = 'SNWA';  %HH*
 %setting.station1 = 'WIWA'; %HN* 
 %setting.comp1{1} = 'HNZ';
 
 setting.time.start2 = '_2013-10-02 17:17:35_';  setting.time.end2 ='_2013-10-02 17:18:35_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
 setting.intitialunit2 = setting.intitialunit;  
 setting.unit.value2 = setting.unit.value;
-setting.comp2{1} = 'HNZ'; setting.comp2{2} = 'HNN'; setting.comp2{3} = 'HNE';
-setting.station2 = 'BGWA';  %HH*
+setting.comp2{1} = setting.comp1{1}; setting.comp2{2} = setting.comp1{2} ; setting.comp2{3} = setting.comp1{3};
+%setting.comp2{1} = 'HNZ'; setting.comp2{2} = 'HNN'; setting.comp2{3} = 'HNE';
+setting.station2 = setting.station1;  %HH*
 %setting.station2 = 'WIWA'; %HN* 
 %setting.comp2{1} = 'HNZ';
+
+% plot waveforms (twoStationAnalyses)
+setting.waveforms.evid1 = 52587546;  %ebr20130920= 52587546; ebr20131002= 52588537;
+setting.waveforms.evid2 = 52588537;  %;
+setting.DB.DBpath = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1'; %db to get evid, orid, etc.
+setting.waveforms.P1 = 0; setting.waveforms.P2 = 0; % P-wave arrival time
+setting.waveforms.S1 = 0; setting.waveforms.S2 = 0; % S-wave arrival time
+setting.waveforms.timespanfromtnull = 0;    %window size specified from tnull + timewindow
+setting.waveforms.timespanfrompicks = 1;    %window size specified from picks-tmin + timewindow: only 1 works now!!!
+setting.waveforms.timewindow = 15;          %time window (secs) e.g. 35, 15(cona,ebr) 25(arsa,ebr)  
+setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival) 
 
 %//ASCII import
 setting.ASCII.intitialunit = 'g';  %g..9.81m/s²  V..velocity  A..accelerometer

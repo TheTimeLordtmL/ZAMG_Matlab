@@ -10,7 +10,7 @@ end
 
 setting = getSettingsMenuABS(setting);
 
-if setting.showSingleStationData == 1 || setting.showTwoStationData == 1
+if setting.showSingleStationData == 1 || setting.showTwoStationData == 1 || setting.showTwoStationData == 2
     if setting.exportASCII.batchprocess == 0
         fprintf('[1] Import data from %s \n',setting.db.events);
         fprintf('[2] Import data from ASCII file %s \n',setting.ASCII.filename);
@@ -24,6 +24,9 @@ if setting.showSingleStationData == 1 || setting.showTwoStationData == 1
                     else
                         if setting.showTwoStationData == 1
                             showTwoStationData(setting);
+                        end
+                        if setting.showTwoStationData == 2
+                            showTwoStationData2New(setting);
                         end
                     end
                 case 2
@@ -64,7 +67,7 @@ if setting.intitialunit == 'A'
     setting.unitstr = sprintf('Acceleration (%s)',setting.unit.value); 
 end
 fprintf('The data unit is set to %s\n',setting.unitstr);
-fprintf('..start fetching data from %s\n',setting.db.events);
+
 
 
 

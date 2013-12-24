@@ -16,6 +16,28 @@ else
   [setting,data,datastruct] = readTextFile(setting);
 end
 
+% // search data within Landesgrenzen (see getSetting.m)
+if setting.useshape.useLandgrenzen == 1;
+    [data,datastruct,setting] = filterDataWithinPolygonShp(data,datastruct,setting,'normal');
+end
+
+% // Filter the data for Magnitude 
+if setting.filter.Felt == 0
+    [data,setting,datastruct] = filterDataMagnitudeExclude(data,datastruct,setting,setting.eqlist.minmag);
+end
+
+% // Filter the data: revome 'km','sm' etc. (see getSetting.m)
+if setting.filter.UseTheFilter==1
+    [data,excludedtype,setting,datastruct] = filterDataEtypeExclude(data,datastruct,setting);
+    if numel(data)<=0
+        fprintf('All data were filtered and NO EVENTS remain!\n');
+    else
+        fprintf('%g EQ''s remained after applying the filters (for etype,magnitude and polygon)\n',size(data,1));
+    end
+end
+
+
+
 %// get the origin time t0
 % get begin/end for the timestring: eg. '_2013-09-20 02:06:35_';
 if setting.waveforms.timespanfromtnull == 1
@@ -36,8 +58,10 @@ fprintf('get the data  \n');
 settingTRC = setting;
 settingTRC.db.events = setting.DB.DBpath;
 settingTRC.station = setting.waveforms.station;
+compstring = '';
 for t=1:numel(setting.waveforms.comp)
     settingTRC.comp{t} = setting.waveforms.comp{t};
+    compstring = sprintf('%s ',setting.waveforms.comp{t});
 end
 if strcmp(settingTRC.comp{1},'HHZ') || strcmp(settingTRC.comp{1},'HHE') || strcmp(settingTRC.comp{1},'HHN') 
    settingTRC.intitialunit = 'V';
@@ -83,12 +107,12 @@ for p=1:size(evtime,1)
     %n.. aktuelle spalte  m..aktuelle zeile   mmax..max.spaltenanzahl  nmax..dimension zeilen
     if p<=18
         if p==1
-            figure('name','wf for numerous events and per station: 1-18');
+            figure('name',sprintf('waveforms for numerous events: 01-18 (%g) | Filter: %s (%s) | Site: %s (%s)',size(evtime,1),setting.filter.type,setting.filter.filterstring,setting.waveforms.station,compstring));
         end
         [mmax,n,m] = getMNsizeforSubpots(size(data,1),p,nmax); 
     else
         if p==19
-            figure('name','wf for numerous events and per station: 19-36');
+            figure('name',sprintf('waveforms for numerous events: 19-36 (%g) | Filter: %s (%s) | Site: %s (%s)',size(evtime,1),setting.filter.type,setting.filter.filterstring,setting.waveforms.station,compstring));
         end 
         [mmax,n,m] = getMNsizeforSubpots(size(data,1),p-18,nmax); 
     end
@@ -152,17 +176,7 @@ end
 
 
 
-function [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting)
-% settingTRC.time.start = '_2013-09-20 02:06:35_';
-% settingTRC.time.end ='_2013-09-20 02:07:40_';   
 
-for p=1:size(evtime,1)
-    % compute Datenum format from the time strings (DB used, Textfile used)
-    exactstr1 = epoch2str(evtime(p) - setting.waveforms.tmin,'%G %H:%M:%S');
-    exactstr2 = epoch2str(evtime(p) - setting.waveforms.tmin + setting.waveforms.timewindow,'%G %H:%M:%S');
-    cellstrBegin{p} = sprintf('_%s_',exactstr1);
-    cellstrEnd{p} =  sprintf('_%s_',exactstr2);
-end
 
 
 

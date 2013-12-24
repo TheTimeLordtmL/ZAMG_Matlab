@@ -18,10 +18,11 @@ dbj1 = dbsubset(dbj,str_querry2);
 n = dbnrecs(dbj1);
 if n>0
     [oridOut,time,ml] = dbgetv(dbj1,'orid','time','ml');
+    exactstr = epoch2str(time,'%G %H:%M:%S');
     if ~isempty(ml)
-       fprintf(' orid %10.0f resolved for evid %10.0f (%s Magnitude Ml=%3.1f) \n',oridOut,evid,time,ml);
+       fprintf(' orid %10.0f resolved for evid %10.0f (%s Magnitude Ml=%3.1f) \n',oridOut,evid,exactstr,ml);
     else
-       fprintf(' orid %10.0f resolved for evid %10.0f (%s)  \n',oridOut,evid,time); 
+       fprintf(' orid %10.0f resolved for evid %10.0f (%s)  \n',oridOut,exactstr,time); 
     end
 else
     fprintf('[error] Could not find the orid for evid %10.0f\n',evid);

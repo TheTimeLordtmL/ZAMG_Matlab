@@ -1,4 +1,6 @@
 function [data_out,datastruct_out,setting] = filterDataWithinPolygonShp(data,datastruct,setting,flag)
+% flags: 'normal','reference','periodhist','periodseisgraph','periodlast20year'
+
 %// Read and Mask the data points outside the polygon (*.shp)
 tic;
 

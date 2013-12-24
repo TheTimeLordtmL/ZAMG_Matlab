@@ -13,7 +13,12 @@ if strcmp(flag,'reference')
   curr_start = setting.time.refstart;
   curr_end = setting.time.refend;
 end
-fprintf('..opening DB %s\n',curr_database);
+if setting.DB.userectangle == 3
+    %no constrainst, %1..near Austria, 2..user specified, 3..no geographic filter
+    fprintf('..opening DB %s with no geographic constraints (getAllEventsFromWorld)\n',curr_database);
+else
+    fprintf('..opening DB %s  Bmin:%5.2f Bmax:%5.2f  Lmin:%5.2f Lmax:%5.2f (getAllEventsFromWorld)\n',curr_database,setting.DB.rectangle.Bmin,setting.DB.rectangle.Bmax,setting.DB.rectangle.Lmin,setting.DB.rectangle.Lmax);
+end
 tic;
  
 %open db and first subset
@@ -47,7 +52,9 @@ if n>0
  %  1      2   3   4   5    6     7
  dbclose(db);
  fprintf('DB fetched! - %g data sets were found (getAllEventsFromDBWorld.m).\n',n); disp('...start saving the data');
- [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,setting);
+ inull = ones(size(ml,1),1);
+ [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting);
+%[data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting);
                             % saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,setting)
 else
  t = toc;

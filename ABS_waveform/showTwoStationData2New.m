@@ -9,32 +9,36 @@ function showTwoStationData2New(setting)
 % setting.saveDBmode = 1; aus PlotHistMag.m
 setting.waveforms.orid1 = getOridFromEvid(setting,setting.waveforms.evid1);
 setting.waveforms.orid2 = getOridFromEvid(setting,setting.waveforms.evid2);  
-data(1,1) = 'unknown';   %date-time
-data(1,2) = 9.9; %lat
-data(1,3) = 99.9; %lon
-data(1,4) = 0;  %ml
-data(1,5) = 9999;   %orid
-data(1,6) = 0; %depth
-data(1,7) = 1; %inull
 
-if setting.waveforms.timespanfromtnull == 1
-    fprintf('get the origin time(s) t0  \n');
-    [evtime,evtimestr,evid] = getEventOriginTime(data,setting);
-    [cellstrEnd,cellstrBegin] = getBeginEndTimeFromTzero(evtime,evtimestr,setting);
-end
-if setting.waveforms.timespanfrompicks == 1
-    fprintf('get the phase onset times for the first arrival(s) \n');
-    [evtime,evtimestr,evid] = getFirstArrival(data,setting);
-    [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting);
-end
-
-%//DATA 1
+%// get the start/end time for the data
+%//DATA 1 & event 1
+% /P-wave
+[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'P');
+setting.waveforms.P1 = picktime; 
+setting.time.start1 = timestart;   setting.time.end1 = timeend;
 setting = applyTempsettingsTwoStation(setting,1);
-[dataV1,dataA1,setting,error] = getTracesfromAntelope(setting);
+[dataV1P,dataA1P,setting,error] = getTracesfromAntelope(setting);
+% /S-wave 
+[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'S');
+setting.waveforms.S1 = picktime;
+setting.time.start1 = timestart;   setting.time.end1 = timeend;
+setting = applyTempsettingsTwoStation(setting,1);
+[dataV1S,dataA1S,setting,error] = getTracesfromAntelope(setting);
 
-%//DATA 2
+%//DATA 2 & event 2
+% /P-wave
+[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'P');
+setting.waveforms.P2 = picktime; 
+setting.time.start2 = timestart;   setting.time.end2 = timeend;
 setting = applyTempsettingsTwoStation(setting,2);
-[dataV2,dataA2,setting,error] = getTracesfromAntelope(setting);
+[dataV2P,dataA2P,setting,error] = getTracesfromAntelope(setting);
+% /S-wave  
+[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'S');
+setting.waveforms.S2 = picktime; 
+setting.time.start2 = timestart;   setting.time.end2 = timeend;
+setting = applyTempsettingsTwoStation(setting,2);
+[dataV2S,dataA2S,setting,error] = getTracesfromAntelope(setting);
+%setting.waveforms.P1
 
 if error==0
     %//DATA 1
@@ -258,3 +262,35 @@ switch flag
         setting.time.start = setting.time.start2;
         setting.time.end = setting.time.end2;
 end
+
+
+function [timestart,timeend,evtime] = getStartEndTimeFromPhases(setting,orid,station,phase)
+% use the orid to find the phases. based on the arrivals select the data
+
+setting.waveforms.station = station;
+
+data(1,1) = 9999999;   %date-time
+data(1,2) = 9.9; %lat
+data(1,3) = 99.9; %lon
+data(1,4) = 0;  %ml
+data(1,5) = orid;   %orid
+data(1,6) = 0; %depth
+data(1,7) = 1; %inull
+
+% if setting.waveforms.timespanfromtnull == 1
+%     fprintf('get the origin time(s) t0  \n');
+%     [evtime,evtimestr,evid] = getEventOriginTime(data,setting);
+%     [cellstrEnd,cellstrBegin] = getBeginEndTimeFromTzero(evtime,evtimestr,setting);
+% end
+if setting.waveforms.timespanfrompicks == 1
+    fprintf('get the phase onset times for the first arrival(s) \n');
+    switch phase
+        case 'P'
+            [evtime,evtimestr,evid] = getFirstArrival(data,setting);
+        case 'S'
+            [evtime,evtimestr,evid] = getShearwaveArrival(data,setting);  
+    end
+    [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting);
+end
+
+disp('disp in getStartEndTimeFromPhases');

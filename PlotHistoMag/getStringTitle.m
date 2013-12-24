@@ -12,7 +12,9 @@ tmp = strtok(setting.time.start, '_'); jahrvonStr = strtok(tmp, '-');
 tmp = strtok(setting.time.end, '_'); jahrnachStr = strtok(tmp, '-');
 tmp2 = (str2epoch(setting.time.end) - str2epoch(setting.time.start))/(60*60*24);
 if tmp2 <= 367 && tmp2 >= 364 
-    strtitle = sprintf('%s %s in %s %s-%s',strfelt,streventtype,strregion,jahrvonStr,jahrnachStr); 
-else
+    %strtitle = sprintf('%s %s in %s %s-%s',strfelt,streventtype,strregion,jahrvonStr,jahrnachStr); 
     strtitle = sprintf('%s %s in %s - %s',strfelt,streventtype,strregion,jahrvonStr); 
+else
+    strtitle = sprintf('%s %s in %s %s-%s',strfelt,streventtype,strregion,jahrvonStr,jahrnachStr); 
+    %strtitle = sprintf('%s %s in %s - %s',strfelt,streventtype,strregion,jahrvonStr); 
 end

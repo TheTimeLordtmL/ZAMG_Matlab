@@ -17,7 +17,7 @@ setting.DB.readfromDB = 1;     %if eq's are read from a DB
 % time start/end - normal data
 %setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; %schwaz
 %setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2101-01-01 00:00_'; 
-setting.time.start = '_2013-09-20 00:00_';  setting.time.end = '_2013-10-20 10:00_';
+setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_';
 %setting.time.start = '_2011-11-30 15:00_';  setting.time.end = '_2011-12-03 10:00_'; %Hall
 %setting.time.start = '_2010-01-01 00:00_';  setting.time.end = '_2011-01-01 00:00_'; 
 %setting.time.start = '_2011-01-01 00:00_';  setting.time.end = '_2012-01-01 00:00_'; 
@@ -42,7 +42,7 @@ setting.DB.refDBpath = '/net/zagsun26/iscsi/homes/rt/antelope/bebenkatalog/AEC_c
 setting.filepath = 'ereignisse20042011AT.xyz';     
 
 setting.xticknumber = 9;   setting.fontsize = 17;  setting.fontsizeaxis = 16;  setting.fontsizetitle = 18;
-setting.temporalresolution = 'm';    %d..day   h..hour   m..month  j..jahr
+setting.temporalresolution = 'j';    %d..day   h..hour   m..month  j..jahr
 setting.plotInfoSubplot = 1;         % 0/1 outputs statistics on the figure bottom
 setting.plotAutoscaleOn = 1;         % 0/1 outputs statistics on the figure bottom
 setting.filter.UseTheFilter = 1;        %use the eType filter option? (km sm sr - etc.)
@@ -104,8 +104,8 @@ setting.waveforms.plotempty1 = 0;
 setting.waveforms.plotempty2 = 0;
 setting.waveforms.timespanfromtnull = 0;    %window size specified from tnull + timewindow
 setting.waveforms.timespanfrompicks = 1;    %window size specified from picks-tmin + timewindow
-setting.waveforms.timewindow = 20;          %time window (secs) e.g. 35
-setting.waveforms.tmin = 4;                 %time before picks (first arrival)  
+setting.waveforms.timewindow = 15;          %time window (secs) e.g. 35, 15(cona,ebr) 25(arsa,ebr)  
+setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival)  
 
 % // Filter
 setting.filter.on = 1;          %use the filter (41) or not (0)
@@ -114,13 +114,16 @@ switch setting.filter.type
     case 'LP'       %low pass
         setting.filter.lowpassoffdisplace = 5; %low cut off filter for f<0.1 Hz; e.g. 5Hz
         setting.filter.numpolesdisplace = 4;  %number of poles for the filter
+        setting.filter.filterstring = sprintf('%g Hz',setting.filter.lowpassoffdisplace);
     case 'HP'       %high pass
         setting.filter.lowcutoffdisplace = 1.0; %low cut off filter for f<0.1 Hz; e.g. 0.25Hz
-        setting.filter.numpolesdisplace = 4;  %number of poles for the filter       
+        setting.filter.numpolesdisplace = 4;  %number of poles for the filter   
+        setting.filter.filterstring = sprintf('%g Hz',setting.filter.lowcutoffdisplace);
     case 'BP'       %band pass
         setting.filter.Lbound = 1.0; % Hz
         setting.filter.Hbound = 15.0; %HZ
-        setting.filter.numpolesdisplace = 4;  %number of poles for the filter  
+        setting.filter.numpolesdisplace = 4;  %number of poles for the filter
+        setting.filter.filterstring = sprintf('%g-%g Hz',setting.filter.Lbound,setting.filter.Hbound);
 end
 
 

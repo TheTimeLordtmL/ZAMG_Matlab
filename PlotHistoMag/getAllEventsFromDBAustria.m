@@ -29,13 +29,23 @@ if strcmp(flag,'periodlast20year')
   curr_start = sprintf('_%4g-01-01 00:00_',str2num(yearnow)-1-20);
   curr_end = sprintf('_%4g-01-01 00:00_',str2num(yearnow));
 end
-fprintf('..opening DB %s  Bmin:%5.2f Bmax:%5.2f  Lmin:%5.2f Lmax:%5.2f \n',curr_database,setting.DB.rectangle.Bmin,setting.DB.rectangle.Bmax,setting.DB.rectangle.Lmin,setting.DB.rectangle.Lmax);
+if setting.DB.userectangle == 3
+    %no constrainst, %1..near Austria, 2..user specified, 3..no geographic filter
+    fprintf('..opening DB %s with no geographic constraints (getAllEventsFromAustria)\n',curr_database);
+else
+    fprintf('..opening DB %s  Bmin:%5.2f Bmax:%5.2f  Lmin:%5.2f Lmax:%5.2f (getAllEventsFromAustria)\n',curr_database,setting.DB.rectangle.Bmin,setting.DB.rectangle.Bmax,setting.DB.rectangle.Lmin,setting.DB.rectangle.Lmax);
+end
 tic;
 
 %open db and first subset
 db = dbopen(curr_database,'r');
 dborigin = dblookup(db,'','origin','','');
-str_querry1 = sprintf('time >= %s && time <= %s && lat >= %6.2f && lat <= %6.2f && lon >= %6.2f && lon <= %6.2f',curr_start,curr_end,setting.DB.rectangle.Bmin,setting.DB.rectangle.Bmax,setting.DB.rectangle.Lmin,setting.DB.rectangle.Lmax);
+if setting.DB.userectangle == 3
+    %no constrainst, %1..near Austria, 2..user specified, 3..no geographic filter
+    str_querry1 = sprintf('time >= %s && time <= %s',curr_start,curr_end);    
+else
+    str_querry1 = sprintf('time >= %s && time <= %s && lat >= %6.2f && lat <= %6.2f && lon >= %6.2f && lon <= %6.2f',curr_start,curr_end,setting.DB.rectangle.Bmin,setting.DB.rectangle.Bmax,setting.DB.rectangle.Lmin,setting.DB.rectangle.Lmax);
+end
 dborigin = dbsubset(dborigin,str_querry1);
 
 %join with event :orid\#prefor

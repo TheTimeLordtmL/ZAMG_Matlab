@@ -3,9 +3,15 @@ minvallandgrenz = 12;
 
 if setting.DB.readfromDB==1
     % //get historic EQ's
+       switch setting.DB.userectangle
+        case 1  % near Austria - AEC
+          [settinghist,datahist,datastructhist] = getAllEventsFromDBAustria(setting,'normal'); 
+        case 2  % user specified - zagsunxx
+          [settinghist,datahist,datastructhist] = getAllEventsFromDBWorld(setting,'normal');   
+        otherwise  % no geographic filter
+          [settinghist,datahist,datastructhist] = getAllEventsFromDBWorld(setting,'normal');   
+    end 
     
-    [settinghist,datahist,datastructhist] = getAllEventsFromDBAustria(setting,'normal');
-    disp(' ');
     % plot data within Landesgrenzen (see getSetting.m)
     if setting.useshape.useLandgrenzen == 1;
         [datahist,datastructhist,settinghist] = filterDataWithinPolygonShp(datahist,datastructhist,settinghist,'periodhist');

@@ -14,7 +14,7 @@ fprintf('[1] Filter EQ (use all EQ''s) \n');
 fprintf('[2] Filter EQ (use all felt EQ''s)  \n');
 fprintf('[3] Filter no EQ (use all events but no EQ''s) \n');
 fprintf('[4] Filter Induced (use km) \n');
-fprintf('[5] Filter Induced (use km & sm) \n');
+fprintf('[5] Filter Induced (use km & sm & kx) \n');
 fprintf('[6] Filter Induced (use sr) \n');
 fprintf('[7] Filter Landslide (use kl) \n');
 fprintf('[8] No Filter \n');
@@ -25,7 +25,7 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
             setting.filter.UseTheFilter = 1;        %use the eType filter option? (km sm sr - etc.)
             setting.filter.Felt = 0; 
             streventtype = 'Erdbeben';
-            setting.filter.WhichData = {'km' 'sm' 'kh' 'sh' 'sr' 'kl' 'uk'};  %alle Beben
+            setting.filter.WhichData = {'km' 'sm' 'kh' 'sh' 'sr' 'kl' 'uk' 'kx'};  %alle Beben
         case 2
             setting.filter.UseTheFilter = 1;   setting.filter.Felt = 1;
             streventtype = 'Erdbeben';
@@ -37,7 +37,7 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
         case 4
             setting.filter.UseTheFilter = 1;   setting.filter.Felt = 0;
             streventtype = 'Sprengungen';
-            setting.filter.WhichData = {'sm' 'kh' 'sr' 'sh' 'kl' 'uk' '-' 'fe' 'de' 'ke' ' '};
+            setting.filter.WhichData = {'sm' 'kh' 'sr' 'sh' 'kl' 'uk' 'kx' '-' 'fe' 'de' 'ke' ' '};
         case 5
             setting.filter.UseTheFilter = 1;   setting.filter.Felt = 0; 
             streventtype = 'Sprengungen';
@@ -177,9 +177,8 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
                 fprintf('prepare QUIT\n');
             end
         case 4
-            setting.DB.userectangle = 0; %no rectangle filter to reduce the data amount:
-            setting.useshape.useLandgrenzen = 1;
-            setting.DB.userectangle = 3;
+            setting.useshape.useLandgrenzen = 0;
+            setting.DB.userectangle = 3; %no rectangle filter to reduce the data amount
             strregion = 'der Welt';
             strgeographregion = sprintf('No Constraints');
     end
@@ -261,30 +260,35 @@ setting.statref.timespan{setting.statref.currRun} = sprintf('%s - %s',setting.ti
 
 
 % flag==7
-if setting.flag == 7
-    fprintf('Specify the minimal magnitude \n');
-    inp = input('>> Please select the option [q..quit]\n','s');
-    if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
-        setting.eqlist.minmag = str2num(inp);
+if setting.flag == 7 || setting.flag == 9 || setting.flag == 1 || setting.flag == 2 || setting.flag == 3
+    % ask for minimum magnitude (but not when felt EQ's are searched) 
+    if setting.filter.Felt == 0
+        fprintf('Specify the minimal magnitude \n');
+        inp = input('>> Please select the option [q..quit]\n','s');
+        if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+            setting.eqlist.minmag = str2num(inp);
+        end
     end
-    fprintf('Specify the file format: \n');
-    fprintf('[1] orid date evname mag lat lon             \n');
-    fprintf('[2] orid date evname mag lat lon depth etype \n');
-    fprintf('[3] orid date evname inull lat lon depth etype \n');
-    fprintf('[4] orid date inull lat lon depth etype \n');
-    inp = input('>> Please select the option [q..quit]\n','s');
-    if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
-        setting.eqlist.format = str2num(inp);
-    end 
-    fprintf('Specify the KML format: \n');
-    fprintf('[0] no scale with symbol size             \n');
-    fprintf('[1] scale symbol with magnitude \n');
-    fprintf('[2] scale symbol with depth   \n');
-    fprintf('[99] do not generate a kml file  \n');
-    inp = input('>> Please select the option [q..quit]\n','s');
-    if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
-        setting.eqlist.symbolrangeKML = str2num(inp);
-    end    
+    if setting.flag == 7
+        fprintf('Specify the file format: \n');
+        fprintf('[1] orid date evname mag lat lon             \n');
+        fprintf('[2] orid date evname mag lat lon depth etype \n');
+        fprintf('[3] orid date evname inull lat lon depth etype \n');
+        fprintf('[4] orid date inull lat lon depth etype \n');
+        inp = input('>> Please select the option [q..quit]\n','s');
+        if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+            setting.eqlist.format = str2num(inp);
+        end
+        fprintf('Specify the KML format: \n');
+        fprintf('[0] no scale with symbol size             \n');
+        fprintf('[1] scale symbol with magnitude \n');
+        fprintf('[2] scale symbol with depth   \n');
+        fprintf('[99] do not generate a kml file  \n');
+        inp = input('>> Please select the option [q..quit]\n','s');
+        if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+            setting.eqlist.symbolrangeKML = str2num(inp);
+        end
+    end
 end
 
 % flag==7
@@ -399,8 +403,8 @@ switch setting.flag
         %setting.title = 'Die Emilia Erdbeben am 20/5 und 29/5/2012';
         %setting.title = 'Anzahl der registrierten Ereignisse pro Tag (Mai-Juni 2012)';
         %setting.title = 'Der Erdbebenschwarm in Vogtland am 24/8 und 26/8/2011';
-        
-        setting.title = sprintf('Erdbeben bei Ebreichsdorf - %s',jahrvonStr);
+        %// empty title .. title is set autonatically!!
+        %setting.title = sprintf('Erdbeben bei Ebreichsdorf - %s',jahrvonStr);
         %setting.title = sprintf('Erdbeben in Österreich %s-%s',jahrvonStr,jahrnachStr);
         %setting.title = 'Gesamte Auswertung mit dem Erdbebenschwarm Vogtland am 24/8 und 26/8/2011';
         setting.ylim = [0 20];  %at 850, emilia 140
@@ -423,13 +427,14 @@ switch setting.flag
         setting.filter.db = 'AEC.origin';
         setting.lokalsetting = 1; 
     case 2	%   NormalHistplotEQmitandere(setting);
-        setting.title = sprintf('Anzahl der Ereignisse pro Jahr (%s-%s)',jahrvonStr,jahrnachStr);
+        %// empty title .. title is set autonatically!!
+        %setting.title = sprintf('Anzahl der Ereignisse pro Jahr (%s-%s)',jahrvonStr,jahrnachStr);
         setting.ylim = [0 1];
         setting.format.date = 'dd/mm/yyyy';
         setting.format.date1 = 'dd/mm/yyyy HH';
         setting.format.date2 = 'dd/mm/yyyy HH:MM:SS';
         setting.filter.Felt = 0;        %use additionally DB 'felt' (for older data) 0..no 1..yes
-        setting.filter1.WhichData = {'km' 'sm' 'kh' 'sh' 'sr' 'sh' 'kl' 'uk'};
+        setting.filter1.WhichData = {'km' 'sm' 'kh' 'sh' 'sr' 'sh' 'kl' 'uk' 'kx'};
         setting.filter2.WhichData = {'-' 'fe' 'de' 'ke'};
         setting.filter.db = 'zagsun17.origin';
         setting.src.left = 5; setting.src.bottom = 5; setting.src.width = 1100; setting.src.height = 800;
@@ -441,7 +446,8 @@ switch setting.flag
         setting.InfoPlot.subP = 6;
         setting.lokalsetting = 2;
     case 3	%   PlotNormalHistogramm(setting); 
-        setting.title = 'Test';
+        %// empty title .. title is set autonatically!!
+        %setting.title = 'Test';
         setting.ylim = [0 800];
         setting.stacks = {0 1 2 3 4 5};       %Magnitude classes - Italy
         setting.format.date = 'yyyy/mm/dd';

@@ -67,8 +67,15 @@ for z=1:numel(setting.comp)
      %plot(data);
      %legend();
   else
-     fprintf('..(%g/%g) %s  %s not found \n',pcurr,psum,strstation,curr_component); 
+      fprintf('..(%g/%g) %s  %s not found. Need to change the channel? Time frame \n',pcurr,psum,strstation,curr_component);
   end
+  dbclose(db);
+  
+  if n == 0
+      % suggest suitable periods from database
+      suggestAvailableTimeFrameWaveforms(setting,strstation,curr_component);
+  end
+
 end
 
 
