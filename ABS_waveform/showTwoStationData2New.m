@@ -1,8 +1,9 @@
 function showTwoStationData2New(setting)
+% // [4] Show two station analysis (use picks from DB)
+%    compare two events, show P- und S-wave spectra with noise spectra
 
 % get calib from Antelope
 %[setting] = getCalibFromAntelope(setting);
-
 
 %// get the origin time t0
 % get begin/end for the timestring: eg. '_2013-09-20 02:06:35_';
@@ -12,35 +13,26 @@ setting.waveforms.orid2 = getOridFromEvid(setting,setting.waveforms.evid2);
 
 %// get the start/end time for the data
 %//DATA 1 & event 1
-% /P-wave
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'P');
 setting.waveforms.P1 = picktime; 
 setting.time.start1 = timestart;   setting.time.end1 = timeend;
-setting = applyTempsettingsTwoStation(setting,1);
-[dataV1P,dataA1P,setting,error] = getTracesfromAntelope(setting);
-% /S-wave 
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'S');
-setting.waveforms.S1 = picktime;
-setting.time.start1 = timestart;   setting.time.end1 = timeend;
+setting.waveforms.S1 = picktime; 
 setting = applyTempsettingsTwoStation(setting,1);
-[dataV1S,dataA1S,setting,error] = getTracesfromAntelope(setting);
+[dataV1,dataA1,setting,error1] = getTracesfromAntelope(setting);
 
 %//DATA 2 & event 2
-% /P-wave
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'P');
 setting.waveforms.P2 = picktime; 
 setting.time.start2 = timestart;   setting.time.end2 = timeend;
-setting = applyTempsettingsTwoStation(setting,2);
-[dataV2P,dataA2P,setting,error] = getTracesfromAntelope(setting);
-% /S-wave  
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'S');
-setting.waveforms.S2 = picktime; 
-setting.time.start2 = timestart;   setting.time.end2 = timeend;
+setting.waveforms.S2 = picktime;
 setting = applyTempsettingsTwoStation(setting,2);
-[dataV2S,dataA2S,setting,error] = getTracesfromAntelope(setting);
-%setting.waveforms.P1
+[dataV2,dataA2,setting,error2] = getTracesfromAntelope(setting);
 
-if error==0
+[setting] = getPhaseUnixsecsAndSamplesFromPicks(setting);
+
+if error1==0 && error2==0
     %//DATA 1
     setting = applyTempsettingsTwoStation(setting,1);
     % remove data if no data is available
@@ -84,147 +76,82 @@ if error==0
        fprintf('[warning] number of compontents vary (setting.comp1 vs. setting.comp2)\n'); 
     end
     
+    % // get displacement,velocity, acceleration data
     % FOR each component
     for p=1:numel(setting.comp1)
-        
-        %//PLOT the amplitude spectra
-        % plot V oder A as is from original data
+        % get V oder A as is from original data
         if setting.intitialunit == 'A'
-            ylabeltmp = sprintf('%s',setting.unitstr);
-            curTrace = dataA1{p};
-            [sSigSpec1,maxampl1] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
-            curTrace = dataA2{p};
-            [sSigSpec2,maxampl2] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
+            ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
+            curTrace = dataA1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.samplerate{p});
+            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.samplerate{p});
+            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.samplerate{p});
+            
+            ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
+            curTrace = dataA2{p}; [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.samplerate{p});
+            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.samplerate{p});
+            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.samplerate{p});
         end
         if setting.intitialunit == 'V'
-            ylabeltmp = sprintf('%s',setting.unitstr);
-            curTrace = dataV1{p};
-            [sSigSpec1,maxampl1] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
-            curTrace = dataV2{p};
-            [sSigSpec2,maxampl2] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
+            ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
+            curTrace = dataV1{p}; [psig,ssig,noise] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig,setting.samplerate{p});
+            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig,setting.samplerate{p});
+            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise,setting.samplerate{p});
+            
+            ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
+            curTrace = dataV2{p};  [psig,ssig,noise] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig,setting.samplerate{p});
+            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig,setting.samplerate{p});
+            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise,setting.samplerate{p});
         end
-        figure('Position',[setting.src.left setting.src.bottom setting.src.width setting.src.height],'Name','amplitude spectra');
-        subplot(4,4,[1 2 5 6]);
-        loglog(sSigSpec1.frequ(:),sSigSpec1.fft(:),'Color','blue','LineWidth',1);
-        hold on;
-        loglog(sSigSpec2.frequ(:),sSigSpec2.fft(:),'Color','red','LineWidth',1);
-        grid on;
-        xlim([1 50]);
-        ylabel(ylabeltmp);    xlabel('frequency (Hz)');
-        tmplabel{1} = sprintf('%s(%s) %s',setting.station1,setting.comp1{p},setting.time.start1);
-        tmplabel{2} = sprintf('%s(%s) %s',setting.station2,setting.comp2{p},setting.time.start2);
-        legend(tmplabel,numel(tmplabel));
-        
-        %plot displacement from integration
-        ylabeltmp = sprintf('computed displacement from %s',setting.unitstr);
-        curTrace = dataDout1{p};
-        [dsSigSpec1,maxampl1] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
-        curTrace = dataDout2{p};
-        [dsSigSpec2,maxampl2] = getSpectrumfromCurData(curTrace,setting.samplerate{p});
-        subplot(4,4,[3 4 7 8]);
-        loglog(dsSigSpec1.frequ(:),dsSigSpec1.fft(:),'Color','blue','LineWidth',1);
-        hold on;
-        loglog(dsSigSpec2.frequ(:),dsSigSpec2.fft(:),'Color','red','LineWidth',1);
-        grid on;
-        xlim([1 50]);
-        ylabel(ylabeltmp);    xlabel('frequency (Hz)');
-        legend(tmplabel,numel(tmplabel));
-        
-        
-        %//plot the waveforms
-        %figure('Position',[setting.src.left setting.src.bottom setting.src.width setting.src.height],'Name','waveforms');
-        subplot(4,4,[9:12]);
-        if setting.twostation.showdisplacement == 1
-            atmp = [dataDout1{p};dataDout2{p}];
-            tmpunitwf = 'cm';
-            tmpunitwfval = 'D';
-            curTrace = dataDout1{p};      xvec = 1:numel(curTrace);
-            switch setting.filter.type
-                case 'LP'       %low pass
-                    curTraceFilt1 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                case 'HP'       %high pass
-                    curTraceFilt1 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                case 'BP'       %band pass
-                    %emtyp
-            end
-            plot(1:numel(curTraceFilt1),curTraceFilt1,'Color','blue','LineWidth',1); hold on;
-        else
-            if setting.intitialunit == 'A'
-                atmp = [dataA1{p};dataA2{p}];
-                curTrace = dataA1{p};      xvec = 1:numel(curTrace);
-                switch setting.filter.type
-                    case 'LP'       %low pass
-                        curTraceFilt1 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                    case 'HP'       %high pass
-                        curTraceFilt1 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                    case 'BP'       %band pass
-                        %emtyp
-                end
-                plot(1:numel(curTraceFilt1),curTraceFilt1,'Color','blue','LineWidth',1);
-            end
-            if setting.intitialunit == 'V'
-                atmp = [dataV1{p};dataV2{p}];
-                curTrace = dataV1{p};      xvec = 1:numel(curTrace);
-                switch setting.filter.type
-                    case 'LP'       %low pass
-                        curTraceFilt1 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                    case 'HP'       %high pass
-                        curTraceFilt1 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                    case 'BP'       %band pass
-                        %emtyp
-                end                
-                plot(1:numel(curTraceFilt1),curTraceFilt1,'Color','blue','LineWidth',1);
-            end
-            tmpunitwf = setting.intitialunit1;
-            tmpunitwfval = setting.unit.value1;
+    
+        %get displacement spectra from integration
+        if setting.waveforms.useDisplacement == 1
+            ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
+            curTrace = dataDout1{p};  [psig1disp{p},ssig1disp{p},noise1disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [dspSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(psig1disp{p},setting.samplerate{p});
+            [dssSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(ssig1disp{p},setting.samplerate{p});
+            [dsnoiseSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(noise1disp{p},setting.samplerate{p});
+            
+            ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
+            curTrace = dataDout2{p}; [psig2disp{p},ssig2disp{p},noise2disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [dspSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(psig2disp{p},setting.samplerate{p});
+            [dssSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(ssig2disp{p},setting.samplerate{p});
+            [dsnoiseSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(noise2disp{p},setting.samplerate{p});
         end
-        ylim([min(atmp) max(atmp)]);
-        legend(tmplabel{1},1);     ylabel(sprintf('%s (%s)',tmpunitwf,tmpunitwfval));
-        
-        subplot(4,4,[13:16]);
-        if setting.twostation.showdisplacement == 1
-            curTrace = dataDout2{p};      xvec = 1:numel(curTrace);
-            switch setting.filter.type
-                case 'LP'       %low pass
-                    curTraceFilt2 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                case 'HP'       %high pass
-                    curTraceFilt2 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                case 'BP'       %band pass
-                    %emtyp
-            end
-            plot(1:numel(curTraceFilt2),curTraceFilt2,'Color','red','LineWidth',1);
-        else
-            if setting.intitialunit == 'A'
-                curTrace = dataA2{p};      xvec = 1:numel(curTrace);
-                switch setting.filter.type
-                    case 'LP'       %low pass
-                        curTraceFilt2 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                    case 'HP'       %high pass
-                        curTraceFilt2 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                    case 'BP'       %band pass
-                        %emtyp
-                end
-                plot(1:numel(curTraceFilt2),curTraceFilt2,'Color','blue','LineWidth',1); hold on;
-            end
-            if setting.intitialunit == 'V'
-                curTrace = dataV2{p};      xvec = 1:numel(curTrace);
-                switch setting.filter.type
-                    case 'LP'       %low pass
-                        curTraceFilt2 = filterLowPass(curTrace,setting.samplerate{p},setting);
-                    case 'HP'       %high pass
-                        curTraceFilt2 = filterLowCutOff(curTrace,setting.samplerate{p},setting);
-                    case 'BP'       %band pass
-                        %emtyp
-                end                
-                plot(1:numel(curTraceFilt2),curTraceFilt2,'Color','blue','LineWidth',1);
-            end
-            tmpunitwf = setting.intitialunit2;
-            tmpunitwfval = setting.unit.value2;
-        end
-        ylim([min(atmp) max(atmp)]);
-        legend(tmplabel{2},1);     ylabel(sprintf('%s (%s)',tmpunitwf,tmpunitwfval));
-    end
+     end
     % FOR each component (ende)
+    
+    % PLOT waveforms (if specified)
+    if setting.waveforms.plotwaveforms == 1
+        if setting.waveforms.useDisplacement == 0
+            if setting.intitialunit == 'V'
+                plotTwoStationWaveformsPsigSsigNoise(psig1,ssig1,noise1,psig2,ssig2,noise2,dataV1,dataV2,setting);                
+            end
+            if setting.intitialunit == 'A'
+                plotTwoStationWaveformsPsigSsigNoise(psig1,ssig1,noise1,psig2,ssig2,noise2,dataA1,dataA2,setting);
+            end
+        end
+        if setting.waveforms.useDisplacement == 1
+            plotTwoStationWaveformsPsigSsigNoise(psig1disp,ssig1disp,noise1disp,psig2disp,ssig2disp,noise2disp,dataDout1,dataDout2,setting);
+        end
+    end
+    
+    % prepare spectren for Z- and NE-Components
+    if setting.waveforms.useDisplacement == 0
+        %pSigSpec1,sSigSpec1,noiseSigSpec1,pSigSpec2,sSigSpec2,noiseSigSpec2
+        [specvec1,specvec2,pspectra1,pspectra2,sspectra1,sspectra2,znoisespectra1,znoisespectra2,horznoisespectra1,horznoisespectra2] = prepareSpectraTwoStationsNew(pSigSpec1,sSigSpec1,noiseSigSpec1,pSigSpec2,sSigSpec2,noiseSigSpec2,setting);
+    end
+    if setting.waveforms.useDisplacement == 1
+        %dspSigSpec1,dssSigSpec1,dsnoiseSigSpec1,
+        [specvec1,specvec2,pspectra1,pspectra2,sspectra1,sspectra2,znoisespectra1,znoisespectra2,horznoisespectra1,horznoisespectra2] = prepareSpectraTwoStationsNew(dspSigSpec1,dssSigSpec1,dsnoiseSigSpec1,dspSigSpec2,dssSigSpec2,dsnoiseSigSpec2,setting);
+    end
+    
+    % PLOT the spectren
+    plotTwoStationSpectraNew(specvec1,specvec2,pspectra1,pspectra2,sspectra1,sspectra2,znoisespectra1,znoisespectra2,horznoisespectra1,horznoisespectra2,setting);
+    
     
     if setting.exportDataASCII == 0
         %plotWaveforms(dataV,dataA,ABS,Arias,setting);   %waveforms *Z *N *E
@@ -292,5 +219,9 @@ if setting.waveforms.timespanfrompicks == 1
     end
     [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting);
 end
+timestart = cellstrBegin{1};
+timeend = cellstrEnd{1};
+fprintf('[Time] Begin/End time is defined by from p-wave onset, noise length (tmin) and p-wave onset-tmin+timewindow \n');
+fprintf('       Begin: %s  End: %s \n',timestart,timeend);
 
-disp('disp in getStartEndTimeFromPhases');
+

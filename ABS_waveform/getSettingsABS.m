@@ -110,7 +110,21 @@ setting.waveforms.S1 = 0; setting.waveforms.S2 = 0; % S-wave arrival time
 setting.waveforms.timespanfromtnull = 0;    %window size specified from tnull + timewindow
 setting.waveforms.timespanfrompicks = 1;    %window size specified from picks-tmin + timewindow: only 1 works now!!!
 setting.waveforms.timewindow = 15;          %time window (secs) e.g. 35, 15(cona,ebr) 25(arsa,ebr)  
-setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival) 
+setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival) - used to get data from db (this is  maximal time for noise, tnoisesubtract is subtracted)
+setting.waveforms.tnoisesubtract = 0.4;       %time (s) that is subtracted from p.onset to get the noise length.
+setting.waveforms.tpwindowmax = 3;          %time (s) that is maximal used to get p-wave spectra
+setting.waveforms.tswindowmax = 5;          %time (s) that is maximal used to get s-wave spectra
+setting.waveforms.fixPSamplSpectra = 1;     %define if Ylimit is fixed for P- and S-spectra plot
+setting.waveforms.useManualYlimit = 0;      %use manual vals for Y-axis (req. fixPSamplSpectra)
+setting.waveforms.useManualXlimit = 0;      %use manual vals for X-axis (req. fixPSamplSpectra)
+setting.waveforms.manualYlimit = [0.00001 1];   %[0.00001 1];(req. fixPSamplSpectra)
+setting.waveforms.manualXlimit = [0.1 50];      %[0.1 50];(req. fixPSamplSpectra)
+setting.waveforms.plotNoiseSpectra = 1;     %plot noise spectra?
+setting.waveforms.plotSignalSpectraReducedByNoise = 0;     %reduce the noise from the signal spectra?
+setting.waveforms.plotSizeLineSpectraSignal = 2.5;
+setting.waveforms.plotSizeLineSpectraNoise = 0.5;
+setting.waveforms.plotwaveforms = 0;        %plot the waveforms? (test extraction of psig,ssig,noise)
+setting.waveforms.useDisplacement = 0;        %use Displacement instead of acc/velocity
 
 %//ASCII import
 setting.ASCII.intitialunit = 'g';  %g..9.81m/s²  V..velocity  A..accelerometer

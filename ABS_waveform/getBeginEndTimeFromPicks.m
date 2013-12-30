@@ -1,4 +1,6 @@
 function [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting)
+% Data begin/end is defined from p-wave onset, noise length (tmin) and
+% p-wave onset-tmin+timewindow.
 % settingTRC.time.start = '_2013-09-20 02:06:35_';
 % settingTRC.time.end ='_2013-09-20 02:07:40_';   
 

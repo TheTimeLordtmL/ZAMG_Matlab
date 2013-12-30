@@ -1,4 +1,6 @@
 function showTwoStationData(setting)
+% // [3] Show two station analysis (use specific time frames)
+%    compare two events
 
 % get calib from Antelope
 %[setting] = getCalibFromAntelope(setting);
