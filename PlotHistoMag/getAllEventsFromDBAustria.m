@@ -55,10 +55,14 @@ str_querry2 = 'orid==prefor';
 dbj1 = dbsubset(dbj,str_querry2);
 
 %join with meval and search 'felt' earthquakes
-if setting.filter.Felt == 1
+if setting.filter.Felt == 1 || setting.eqlist.useinensities == 1
     dbmeval = dblookup(dbj1,'','meval','','');
     dbmevalj1 = dbjoin(dbj1,dbmeval);
-    str_querryfelt = sprintf('( etype == ''fe'' && inull >= %3.1f && i_est != ''y'') || ( etype == ''ke'' && inull >= %3.1f && i_est != ''y'') || ( etype == ''de'' && inull >= %3.1f && i_est != ''y'')',setting.felt.minintensity,setting.felt.minintensity,setting.felt.minintensity);
+    if setting.eqlist.useinensities == 1
+        str_querryfelt = sprintf('(inull >= %3.1f && i_est != ''y'')',setting.eqlist.minintensity);
+    else
+        str_querryfelt = sprintf('( etype == ''fe'' && inull >= %3.1f && i_est != ''y'') || ( etype == ''ke'' && inull >= %3.1f && i_est != ''y'') || ( etype == ''de'' && inull >= %3.1f && i_est != ''y'')',setting.felt.minintensity,setting.felt.minintensity,setting.felt.minintensity);
+    end
     dbj1 = dbsubset(dbmevalj1,str_querryfelt);
     n = dbnrecs(dbj1);
 else
@@ -77,7 +81,7 @@ end
 
 
 if n>0
-    if setting.filter.Felt == 1
+    if setting.filter.Felt == 1 || setting.eqlist.useinensities == 1
         [timeflt,lat,lon,ml,etype,orid,depth,evname,inull] = dbgetv(dbj1,'time','lat','lon','ml','etype','orid','depth','evname','inull');
         timestr = strtime(dbgetv(dbj1,'time'));
     else

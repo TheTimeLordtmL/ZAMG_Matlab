@@ -1,5 +1,5 @@
 function [datastack,setting] = stackDataYearly(data,zdatstr,setting)
-%compute the magnitude stack for the yearly period
+%compute the magnitude/intensity stack for the yearly period
 datadatestr = datestr(data(:,1),'yyyy');
 datadatenum = datenum(datadatestr,'yyyy');
 ddatstr = unique([datadatestr;zdatstr],'rows');
@@ -17,7 +17,11 @@ for h=1:numel(ddatenum)
         else
             neueMag = setting.stacks{j+1};
         end
-        ind2 = find(currday(:,5)>= alteMag & currday(:,5)<neueMag);
+        if setting.eqlist.useinensities == 1
+            ind2 = find(currday(:,7)>= alteMag & currday(:,7)<neueMag);
+        else
+            ind2 = find(currday(:,5)>= alteMag & currday(:,5)<neueMag);
+        end
         currday_magclass = currday(ind2,:);
         datastack(z,j) = size(currday_magclass,1);
     end

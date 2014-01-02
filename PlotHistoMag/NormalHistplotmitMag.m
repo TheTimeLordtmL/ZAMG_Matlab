@@ -18,9 +18,9 @@ if setting.useshape.useLandgrenzen == 1;
     [data,datastruct,setting] = filterDataWithinPolygonShp(data,datastruct,setting,'normal');
 end
 
-% // Filter the data for Magnitude 
+% // Filter the data for Magnitude or Intensity
 if setting.filter.Felt == 0
-    [data,setting,datastruct] = filterDataMagnitudeExclude(data,datastruct,setting,setting.eqlist.minmag);
+    [data,setting,datastruct] = filterDataMagnitudeExclude(data,datastruct,setting);
 end
 
 %Filter the data: revome 'km','sm' etc. (see getSetting.m)

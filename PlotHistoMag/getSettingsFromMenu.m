@@ -189,9 +189,9 @@ setting.magPerCalendarYear.strregion = strregion;
 disp(' ');
 
 % PLOT TYPE
-fprintf('[1] HistplotWithMagnitude (Farbe pro Magnitude-Klasse) \n');
+fprintf('[1] HistplotWithMagnitude (Farbe pro Magnitude or Intensity-Klasse) \n');
 fprintf('[2] Histplot2Classes: 2-Klassen Earthquake und alle anderen Ereignisse  \n');
-fprintf('[3] Histplot klassisch (einfärbig) \n');
+fprintf('[3] Histplot klassisch (einfärbig, Magnitude or Intensity)  \n');
 fprintf('[4] Statistik (mit Vergleich zu Mittlerer Periode, Wiederkehrperiode (ab 1900)) \n');
 fprintf('[5] Maximum Magnitude per Calendar Year (hist./1900-2000/<20years) \n');
 fprintf('[6] Temporal Statistics - Tagesgang etc. (hist./1900-2000/<20years) \n');
@@ -259,8 +259,33 @@ setting.statref.strgeogrregion{setting.statref.currRun} = strgeographregion;
 setting.statref.timespan{setting.statref.currRun} = sprintf('%s - %s',setting.time.start,setting.time.end);
 
 
+% flag==3 // differentiate between Magnitude and Intensity
+if setting.flag == 1 || setting.flag == 3 
+    fprintf('[1] Use Magnitudes \n');
+    fprintf('[2] Use Intensities \n');
+    inp = input('>> Please select the option [q..quit]\n','s');
+    if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+        switch str2num(inp)
+            case 1
+                fprintf('Specify the minimal magnitude Ml\n');
+                inp = input('>> Please select the option [q..quit]\n','s');
+                if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+                    setting.eqlist.minmag = str2num(inp);
+                    setting.eqlist.useinensities = 0;
+                end
+            case 2
+                fprintf('Specify the minimal intensity I0 \n');
+                inp = input('>> Please select the option [q..quit]\n','s');
+                if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+                    setting.eqlist.minintensity = str2num(inp);
+                    setting.eqlist.useinensities = 1;
+                end
+        end
+    end
+end
+
 % flag==7
-if setting.flag == 7 || setting.flag == 9 || setting.flag == 1 || setting.flag == 2 || setting.flag == 3
+if setting.flag == 7 || setting.flag == 9 || setting.flag == 2
     % ask for minimum magnitude (but not when felt EQ's are searched) 
     if setting.filter.Felt == 0
         fprintf('Specify the minimal magnitude \n');
@@ -408,10 +433,11 @@ switch setting.flag
         %setting.title = sprintf('Erdbeben in Österreich %s-%s',jahrvonStr,jahrnachStr);
         %setting.title = 'Gesamte Auswertung mit dem Erdbebenschwarm Vogtland am 24/8 und 26/8/2011';
         setting.ylim = [0 20];  %at 850, emilia 140
-        %setting.stacks = {-2 0 1 2 3 4};       %Magnitude classes - Austria
-        %setting.stacks = {0 1 2 3 4 5};       %Magnitude classes - Italy
-        setting.stacks = {0 1 2 3 4};       %gefühlte Magnitude classes - Austria
-        %setting.stacks = {-1 0 0.5 1 1.5 2};       %Magnitude classes - Schwaz
+        %setting.stacks = {-2 0 1 2 3 4};       %Magnitude/intensity classes - Austria
+        %setting.stacks = {0 1 2 3 4 5};       %Magnitude/intensity classes - Italy
+        %setting.stacks = {0 1 2 3 4};       %gefühlte Magnitude/intensity classes - Austria
+        setting.stacks = {4 5 6 7 8};       %Magnitude/intensity classes - Makroseismik
+        %setting.stacks = {-1 0 0.5 1 1.5 2};       %Magnitude/intensity classes - Schwaz
         setting.format.date = 'yyyy/mm/dd';
         setting.format.date1 = 'yyyy/mm/dd HH';
         setting.format.date2 = 'yyyy/mm/dd HH:MM:SS';

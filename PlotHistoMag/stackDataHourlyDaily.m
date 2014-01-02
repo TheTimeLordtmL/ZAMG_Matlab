@@ -1,5 +1,5 @@
 function [datastack] = stackDataHourlyDaily(data,interval,setting)
-%compute the magnitude stack for the hourly/daily period
+%compute the magnitude/intensity stack for the hourly/daily period
 z = 0;
 for h=fix(setting.from):interval:ceil(setting.to)
     z = z + 1;
@@ -12,7 +12,11 @@ for h=fix(setting.from):interval:ceil(setting.to)
         else
             neueMag = setting.stacks{j+1};
         end
-        ind2 = find(currday(:,5)>= alteMag & currday(:,5)<neueMag);
+        if setting.eqlist.useinensities == 1
+            ind2 = find(currday(:,7)>= alteMag & currday(:,7)<neueMag);
+        else
+            ind2 = find(currday(:,5)>= alteMag & currday(:,5)<neueMag);
+        end
         currday_magclass = currday(ind2,:);
         datastack(z,j) = size(currday_magclass,1);
     end
