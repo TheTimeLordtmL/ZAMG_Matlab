@@ -31,13 +31,13 @@ subplot(1,2,1); hold on;
 if setting.waveforms.plotNoiseSpectra == 1
     loglog(specvec1(:),znoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
     loglog(specvec2(:),znoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
-    tmplabel{1} = sprintf('Noise %s',setting.time.start1);
-    tmplabel{2} = sprintf('Noise %s',setting.time.start2);
-    tmplabel{3} = sprintf('%s(Z) %s',setting.station1,setting.time.start1);
-    tmplabel{4} = sprintf('%s(Z) %s',setting.station2,setting.time.start2);
+    tmplabel{1} = sprintf('Noise1   (evid %10.0f)',setting.waveforms.evid1);
+    tmplabel{2} = sprintf('Noise2   (evid %10.0f)',setting.waveforms.evid2);
+    tmplabel{3} = sprintf('%s1 (Z) %s',setting.station1,setting.time.start1);
+    tmplabel{4} = sprintf('%s2 (Z) %s',setting.station2,setting.time.start2);
 else
-    tmplabel{1} = sprintf('%s(Z) %s',setting.station1,setting.time.start1);
-    tmplabel{2} = sprintf('%s(Z) %s',setting.station2,setting.time.start2);
+    tmplabel{1} = sprintf('%s1 (Z) %s',setting.station1,setting.time.start1);
+    tmplabel{2} = sprintf('%s2 (Z) %s',setting.station2,setting.time.start2);
 end
 loglog(specvec1(:),pspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
 loglog(specvec2(:),pspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
@@ -63,11 +63,11 @@ subplot(1,2,2); hold on;
 if setting.waveforms.plotNoiseSpectra == 1
     loglog(specvec1(:),horznoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
     loglog(specvec2(:),horznoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
-    tmplabel{3} = sprintf('%s(N&E) %s',setting.station1,setting.time.start1);
-    tmplabel{4} = sprintf('%s(N&E) %s',setting.station2,setting.time.start2);
+    tmplabel{3} = sprintf('%s1 (N&E) %s',setting.station1,setting.time.start1);
+    tmplabel{4} = sprintf('%s2 (N&E) %s',setting.station2,setting.time.start2);
 else
-    tmplabel{1} = sprintf('%s(N&E) %s',setting.station1,setting.time.start1);
-    tmplabel{2} = sprintf('%s(N&E) %s',setting.station2,setting.time.start2);
+    tmplabel{1} = sprintf('%s1 (N&E) %s',setting.station1,setting.time.start1);
+    tmplabel{2} = sprintf('%s2 (N&E) %s',setting.station2,setting.time.start2);
 end
 loglog(specvec1(:),sspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
 loglog(specvec2(:),sspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);

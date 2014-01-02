@@ -29,7 +29,7 @@ switch setting.intitialunit
         % setting.station = 'WIWA'; %HN* 
          %setting.station = 'SNWA'; %HN* 
         % setting.station = 'KMWA'; %HN* 
-        setting.station = 'UMWA'; %HN* 
+        setting.station = 'SNWA'; %HN* 
         % setting.station = 'BGWA'; %HN* 
         %setting.station = 'KRUC'; %HN* 
         
@@ -58,10 +58,12 @@ setting.dbqueryStr1 = sprintf('%s:%s,%s:%s,%s:%s',setting.station,setting.comp{1
 %setting.time.start = '_2013-03-14 11:16:30_';  setting.time.end ='_2013-03-14 11:18:00_'; setting.nameevent='Molln sm sr? M2.1 2013';
 %setting.time.start = '_2012-03-22 22:53:15_';  setting.time.end ='_2012-03-22 22:54:45_'; setting.nameevent='Felssturz Alpltal';
 
+setting.time.start = '_2013-10-20 14:33:07_';  setting.time.end ='_2013-10-20 14:34:02_'; setting.nameevent='Seebenstein';
+%setting.time.start = '_2013-12-11 17:14:17_';  setting.time.end ='_2013-12-11 17:15:10_'; setting.nameevent='Wr. Neustadt';
 %setting.time.start = '_2013-02-02 13:36:06_';  setting.time.end ='_2013-02-02 13:37:30_'; setting.nameevent='Bad Eisenkappel M4.4 2013_strong';
 %setting.time.start = '_2013-02-02 13:35:25_';  setting.time.end ='_2013-02-02 13:37:25_'; setting.nameevent='Bad Eisenkappel M4.4 2013';
 %setting.time.start = '_2013-06-05 18:45:40_';  setting.time.end ='_2013-06-05 18:49:00_'; setting.nameevent='HungARY 3.6';
-setting.time.start = '_2013-10-02 17:17:39_';  setting.time.end ='_2013-10-02 17:18:30_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
+%  setting.time.start = '_2013-10-02 17:17:39_';  setting.time.end ='_2013-10-02 17:18:30_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
 %setting.time.start = '_2013-09-20 02:06:35_';  setting.time.end ='_2013-09-20 02:07:40_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
 %setting.time.start = '_2013-01-25 07:14:41_';  setting.time.end ='_2013-01-25 07:15:15_'; setting.nameevent='Ebreichsdorf M4.3 20130920';
 %setting.time.start = '_2012-08-25 12:47:00_';  setting.time.end ='_2012-08-25 12:47:53_'; setting.nameevent='Fliegerbombe 2012';
@@ -86,9 +88,10 @@ setting.time.start1 = '_2013-09-20 02:06:32_';  setting.time.end1 ='_2013-09-20 
 setting.intitialunit1 = setting.intitialunit;  
 setting.unit.value1 = setting.unit.value;
 setting.twostation.showdisplacement = 0;  %show waveforms in displacement
-%setting.comp1{1} = 'HHZ'; setting.comp1{2} = 'HHN'; setting.comp1{3} = 'HHE';
-setting.comp1{1} = 'HNZ'; setting.comp1{2} = 'HNN'; setting.comp1{3} = 'HNE';
-setting.station1 = 'SNWA';  %HH*
+setting.comp1{1} = 'HHZ'; setting.comp1{2} = 'HHN'; setting.comp1{3} = 'HHE';
+%setting.comp1{1} = 'HNZ'; setting.comp1{2} = 'HNN'; setting.comp1{3} = 'HNE';
+%setting.comp1{1} = 'HLZ'; setting.comp1{2} = 'HLN'; setting.comp1{3} = 'HLE';
+setting.station1 = 'PUBA';  %HH*
 %setting.station1 = 'WIWA'; %HN* 
 %setting.comp1{1} = 'HNZ';
 
@@ -113,7 +116,7 @@ setting.waveforms.timewindow = 15;          %time window (secs) e.g. 35, 15(cona
 setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival) - used to get data from db (this is  maximal time for noise, tnoisesubtract is subtracted)
 setting.waveforms.tnoisesubtract = 0.4;       %time (s) that is subtracted from p.onset to get the noise length.
 setting.waveforms.tpwindowmax = 3;          %time (s) that is maximal used to get p-wave spectra
-setting.waveforms.tswindowmax = 5;          %time (s) that is maximal used to get s-wave spectra
+setting.waveforms.tswindowmax = 4;          %time (s) that is maximal used to get s-wave spectra
 setting.waveforms.fixPSamplSpectra = 1;     %define if Ylimit is fixed for P- and S-spectra plot
 setting.waveforms.useManualYlimit = 0;      %use manual vals for Y-axis (req. fixPSamplSpectra)
 setting.waveforms.useManualXlimit = 0;      %use manual vals for X-axis (req. fixPSamplSpectra)
@@ -123,7 +126,7 @@ setting.waveforms.plotNoiseSpectra = 1;     %plot noise spectra?
 setting.waveforms.plotSignalSpectraReducedByNoise = 0;     %reduce the noise from the signal spectra?
 setting.waveforms.plotSizeLineSpectraSignal = 2.5;
 setting.waveforms.plotSizeLineSpectraNoise = 0.5;
-setting.waveforms.plotwaveforms = 0;        %plot the waveforms? (test extraction of psig,ssig,noise)
+setting.waveforms.plotwaveforms = 1;        %plot the waveforms? (test extraction of psig,ssig,noise)
 setting.waveforms.useDisplacement = 0;        %use Displacement instead of acc/velocity
 
 %//ASCII import
