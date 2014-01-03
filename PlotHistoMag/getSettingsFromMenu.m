@@ -296,10 +296,10 @@ if setting.flag == 7 || setting.flag == 9 || setting.flag == 2
     end
     if setting.flag == 7
         fprintf('Specify the file format: \n');
-        fprintf('[1] orid date evname mag lat lon             \n');
-        fprintf('[2] orid date evname mag lat lon depth etype \n');
-        fprintf('[3] orid date evname inull lat lon depth etype \n');
-        fprintf('[4] orid date inull lat lon depth etype \n');
+        fprintf('[1] evid orid date evname mag lat lon             \n');
+        fprintf('[2] evid orid date evname mag lat lon depth etype \n');
+        fprintf('[3] evid orid date evname inull lat lon depth etype \n');
+        fprintf('[4] evid orid date inull lat lon depth etype \n');
         inp = input('>> Please select the option [q..quit]\n','s');
         if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
             setting.eqlist.format = str2num(inp);

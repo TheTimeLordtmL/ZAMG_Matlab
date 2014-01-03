@@ -53,14 +53,15 @@ for k=1:size(datastructhist,2)
    curr_lon = datastructhist(k).origin.lon; 
    curr_orid = datastructhist(k).orid;
    curr_depth = datastructhist(k).origin.depth;
-   curr_etype = datastructhist(k).etype;   
+   curr_etype = datastructhist(k).etype;  
+   curr_evid = datastructhist(k).evid;
    if curr_mag >= magval
        fprintf(fid, '<Placemark> \n');
        switch setting.eqlist.format
            case 1
-               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  orid %16.0f]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_orid);
+               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  evid %16.0f  orid %16.0f]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_evid,curr_orid);
            case 2
-               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  depth=%4.1f  orid %16.0f <br/> etype=%2s ]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_depth,curr_orid,curr_etype{1});
+               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  depth=%4.1f  evid %16.0f  orid %16.0f <br/> etype=%2s ]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_depth,curr_evid,curr_orid,curr_etype{1});
        end
        fprintf(fid, '<name></name> \n');
        fprintf(fid, '<LookAt><latitude>%7.4f</latitude><longitude>%7.4f</longitude><range>75000</range></LookAt> \n',curr_lat,curr_lon);

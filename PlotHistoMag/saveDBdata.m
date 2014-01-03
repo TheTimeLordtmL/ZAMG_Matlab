@@ -1,4 +1,4 @@
-function [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting)
+function [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid,setting)
 %10/05/2012   47.8361   16.1614    0.0000    1.33 sm  1043284
  % set the date string format (DB used, Textfile used)
   switch setting.temporalresolution
@@ -39,6 +39,7 @@ for r=1:numel(timeflt)
     datastruct(r).orid = orid(r);
     datastruct(r).evname = evname(r);
     datastruct(r).inull = inull(r);
+    datastruct(r).evid = evid(r);
       if mod(r,2000)==0
            fprintf('.');
            if mod(r,10000)==0
@@ -57,6 +58,7 @@ if setting.saveDBmode == 0
     data(:,5) = ml;
     data(:,6) = curr_datum_excact';
     data(:,7) = inull ;
+    data(:,8) = evid ;
 end
 if setting.saveDBmode == 1
     data(:,1) = curr_datum';
@@ -66,6 +68,7 @@ if setting.saveDBmode == 1
     data(:,5) = orid;
     data(:,6) = depth ;
     data(:,7) = inull ;
+    data(:,8) = evid ;
 end
 
 setting.datacountorig = numel(timeflt);

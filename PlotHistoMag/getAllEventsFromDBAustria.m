@@ -82,10 +82,10 @@ end
 
 if n>0
     if setting.filter.Felt == 1 || setting.eqlist.useinensities == 1
-        [timeflt,lat,lon,ml,etype,orid,depth,evname,inull] = dbgetv(dbj1,'time','lat','lon','ml','etype','orid','depth','evname','inull');
+        [timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid] = dbgetv(dbj1,'time','lat','lon','ml','etype','orid','depth','evname','inull','evid');
         timestr = strtime(dbgetv(dbj1,'time'));
     else
-        [timeflt,lat,lon,ml,etype,orid,depth,evname] = dbgetv(dbsub,'time','lat','lon','ml','etype','orid','depth','evname');
+        [timeflt,lat,lon,ml,etype,orid,depth,evname,evid] = dbgetv(dbsub,'time','lat','lon','ml','etype','orid','depth','evname','evid');
         inull = ones(size(ml,1),1);
         timestr = strtime(dbgetv(dbsub,'time'));
     end
@@ -95,7 +95,7 @@ if n>0
     if setting.felt.showFeltEQhisto==1
         showInullHistogram(timestr,inull,setting);
     end
-    [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting);
+    [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid,setting);
 else
     t = toc;
     fprintf('NO EQ''s were extracted from %s (%4.1f s) (getAllEventsFromDBAustria.m)\n',curr_database,t);

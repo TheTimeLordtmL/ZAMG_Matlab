@@ -47,14 +47,14 @@ dbj2 = dbsort(dbj2,'orid','dbSORT_UNIQUE');
 dbsub = dbsort(dbj2,'time');
 n = dbnrecs(dbsub);
 if n>0
- [timeflt,lat,lon,ml,etype,orid,depth,evname] = dbgetv(dbsub,'time','lat','lon','magnitude','etype','orid','depth','evname');
+ [timeflt,lat,lon,ml,etype,orid,depth,evname,evid] = dbgetv(dbsub,'time','lat','lon','magnitude','etype','orid','depth','evname','evid');
  timestr = strtime(dbgetv(dbsub,'time'));
  %  1      2   3   4   5    6     7
  dbclose(db);
  fprintf('DB fetched! - %g data sets were found (getAllEventsFromDBWorld.m).\n',n); disp('...start saving the data');
  inull = ones(size(ml,1),1);
- [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting);
-%[data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,setting);
+ [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid,setting);
+%[data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid,setting);
                             % saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,setting)
 else
  t = toc;

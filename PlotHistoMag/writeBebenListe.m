@@ -12,13 +12,13 @@ fid = fopen(fileout,'w');
 %                               170768        5/19/2006  14:00:22.899  St. Veit an der                                  3.5   46.8085  14.3702
 switch setting.eqlist.format
     case 1
-        fprintf(fid, '          orid          Date       Time       Location                                            Ml    lat      lon  \n');
+        fprintf(fid, '          evid          orid          Date       Time       Location                                            Ml    lat      lon  \n');
     case 2
-        fprintf(fid, '          orid          Date       Time       Location                                            Ml    lat      lon     depth etype\n');        
+        fprintf(fid, '          evid          orid          Date       Time       Location                                            Ml    lat      lon     depth etype\n');        
     case 3
-        fprintf(fid, '          orid          Date       Time       Location                                            I0    lat      lon     depth etype\n');   
+        fprintf(fid, '          evid          orid          Date       Time       Location                                            I0    lat      lon     depth etype\n');   
     case 4
-        fprintf(fid, '          orid          Date       Time          I0    lat      lon     depth etype\n');   
+        fprintf(fid, '          evid          orid          Date       Time          I0    lat      lon     depth etype\n');   
 end
 
 for k=1:size(datastructhist,2)
@@ -31,16 +31,17 @@ for k=1:size(datastructhist,2)
     curr_depth = datastructhist(k).origin.depth;
     curr_etype = datastructhist(k).etype;
     curr_inull = datastructhist(k).inull;
+    curr_evid = datastructhist(k).evid;
     if curr_mag >= magval
         switch setting.eqlist.format
             case 1
-                fprintf(fid,'%16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f\n',curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon);
+                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon);
             case 2
-                fprintf(fid,'%16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon,curr_depth,curr_etype{1});
+                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon,curr_depth,curr_etype{1});
             case 3
-                fprintf(fid,'%16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_orid,curr_datestr{1},curr_evname{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
+                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
             case 4
-                fprintf(fid,'%16.0f %+30s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_orid,curr_datestr{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
+                fprintf(fid,'%16.0f %16.0f %+30s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
             case 5
                 fprintf(fid,'not defined yet \n');
         end
