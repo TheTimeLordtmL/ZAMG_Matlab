@@ -14,7 +14,7 @@ if setting.DB.readfromDB==1
     
     % plot data within Landesgrenzen (see getSetting.m)
     if setting.useshape.useLandgrenzen == 1;
-        [datahist,datastructhist,settinghist] = filterDataWithinPolygonShp(datahist,datastructhist,settinghist,'periodhist');
+        [datahist,datastructhist,settinghist] = filterDataWithinPolygonShp(datahist,datastructhist,settinghist,'normal');
     end
 
     % // Filter the data for Magnitude or Intensity
