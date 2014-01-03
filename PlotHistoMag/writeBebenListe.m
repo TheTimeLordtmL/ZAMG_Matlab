@@ -32,19 +32,17 @@ for k=1:size(datastructhist,2)
     curr_etype = datastructhist(k).etype;
     curr_inull = datastructhist(k).inull;
     curr_evid = datastructhist(k).evid;
-    if curr_mag >= magval
-        switch setting.eqlist.format
-            case 1
-                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon);
-            case 2
-                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon,curr_depth,curr_etype{1});
-            case 3
-                fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
-            case 4
-                fprintf(fid,'%16.0f %16.0f %+30s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
-            case 5
-                fprintf(fid,'not defined yet \n');
-        end
+    switch setting.eqlist.format
+        case 1
+            fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon);
+        case 2
+            fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_mag,curr_lat,curr_lon,curr_depth,curr_etype{1});
+        case 3
+            fprintf(fid,'%16.0f %16.0f %+30s  %-45s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_evname{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
+        case 4
+            fprintf(fid,'%16.0f %16.0f %+30s  %5.1f  %8.4f %8.4f %6.1f %+2s\n',curr_evid,curr_orid,curr_datestr{1},curr_inull,curr_lat,curr_lon,curr_depth,curr_etype{1});
+        case 5
+            fprintf(fid,'not defined yet \n');
     end
 end
 fclose(fid);  fclose('all');

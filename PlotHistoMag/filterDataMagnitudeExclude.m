@@ -39,3 +39,14 @@ end
 ind = find(flag==1);
 dataout = data(ind,:);  clear data;
 datastructout = datastruct(ind);        %store the datastruct
+if size(dataout,1) > 0
+    if setting.eqlist.useinensities == 0
+        fprintf('%g EQ''s were found after filtering for magnitude (filterDataMagnitudeExclude.m)\n',size(dataout,1));
+    end
+    if setting.eqlist.useinensities == 1
+        fprintf('%g EQ''s were found after filtering for intensity (filterDataMagnitudeExclude.m)\n',size(dataout,1));
+    end
+else
+    fprintf('[warning] filtering for magnitude/intensity: no data are remaining (filterDataMagnitudeExclude.m)\n');
+end
+

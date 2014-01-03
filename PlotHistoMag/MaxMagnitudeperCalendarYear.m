@@ -15,7 +15,7 @@ if setting.DB.readfromDB==1
         end
         %Filter the data: revome 'km','sm' etc. (see getSetting.m)
         if setting.filter.UseTheFilter==1
-            [datahist,excludedtypehist,settinghist,datastructhist] = filterDataEtypeExclude(datahist,datastructhist,settinghist);
+            [datahist,excludedtypehist,settinghist,datastructhist] = filterDataEtypeExclude(datahist,datastructhist,settinghist,'periodhist');
             if numel(datahist)<=0
                 fprintf('All data were filtered and NO EVENTS remain for periodhist!\n');
             end
@@ -41,7 +41,7 @@ if setting.DB.readfromDB==1
             [dataseisgraph,datastructseisgraph,settingseisgraph] = filterDataWithinPolygonShp(dataseisgraph,datastructseisgraph,settingseisgraph,'periodseisgraph');
         end
         if setting.filter.UseTheFilter==1
-            [dataseisgraph,excludedtypeseisgraph,settingseisgraph,datastructseisgraph] = filterDataEtypeExclude(dataseisgraph,datastructseisgraph,settingseisgraph);
+            [dataseisgraph,excludedtypeseisgraph,settingseisgraph,datastructseisgraph] = filterDataEtypeExclude(dataseisgraph,datastructseisgraph,settingseisgraph,'periodseisgraph');
             if numel(dataseisgraph)<=0
                 fprintf('All data were filtered and NO EVENTS remain for periodseisgraph!\n');
             end
@@ -79,7 +79,7 @@ if setting.DB.readfromDB==1
             [datalast20year,datastructlast20year,settinglast20year] = filterDataWithinPolygonShp(datalast20year,datastructlast20year,settinglast20year,'periodlast20year');
         end
         if setting.filter.UseTheFilter==1
-            [datalast20year,excludedtypelast20year,settinglast20year,datastructlast20year] = filterDataEtypeExclude(datalast20year,datastructlast20year,settinglast20year);
+            [datalast20year,excludedtypelast20year,settinglast20year,datastructlast20year] = filterDataEtypeExclude(datalast20year,datastructlast20year,settinglast20year,'periodlast20year');
             if numel(datalast20year)<=0
                 fprintf('All data were filtered and NO EVENTS remain for periodlast20year!\n');
             end

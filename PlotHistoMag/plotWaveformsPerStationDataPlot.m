@@ -28,7 +28,7 @@ end
 
 % // Filter the data: revome 'km','sm' etc. (see getSetting.m)
 if setting.filter.UseTheFilter==1
-    [data,excludedtype,setting,datastruct] = filterDataEtypeExclude(data,datastruct,setting);
+    [data,excludedtype,setting,datastruct] = filterDataEtypeExclude(data,datastruct,setting,'normal');
     if numel(data)<=0
         fprintf('All data were filtered and NO EVENTS remain!\n');
     else

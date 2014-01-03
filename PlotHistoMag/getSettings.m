@@ -17,7 +17,7 @@ setting.DB.readfromDB = 1;     %if eq's are read from a DB
 % time start/end - normal data
 %setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; %schwaz
 %setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2101-01-01 00:00_'; 
-setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_';
+setting.time.start = '_2013-09-01 00:00_';  setting.time.end = '_2014-01-01 00:00_';
 %setting.time.start = '_2011-11-30 15:00_';  setting.time.end = '_2011-12-03 10:00_'; %Hall
 %setting.time.start = '_2010-01-01 00:00_';  setting.time.end = '_2011-01-01 00:00_'; 
 %setting.time.start = '_2011-01-01 00:00_';  setting.time.end = '_2012-01-01 00:00_'; 

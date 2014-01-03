@@ -45,39 +45,37 @@ fprintf(fid, '<name>Reports</name><description>Projekt HAREIRA</description><vis
 fprintf(fid, '<View><longitude>%6.3f</longitude><latitude>%6.3f</latitude><range>3800000</range><tilt>0</tilt><heading>0</heading></View> \n',15.0,47.5);
 
 % // plot the stacked PlZ locations
-for k=1:size(datastructhist,2) 
-   curr_datestr = datastructhist(k).datestr;
-   curr_mag = datastructhist(k).netmag;
-   curr_evname = datastructhist(k).evname;
-   curr_lat = datastructhist(k).origin.lat;
-   curr_lon = datastructhist(k).origin.lon; 
-   curr_orid = datastructhist(k).orid;
-   curr_depth = datastructhist(k).origin.depth;
-   curr_etype = datastructhist(k).etype;  
-   curr_evid = datastructhist(k).evid;
-   if curr_mag >= magval
-       fprintf(fid, '<Placemark> \n');
-       switch setting.eqlist.format
-           case 1
-               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  evid %16.0f  orid %16.0f]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_evid,curr_orid);
-           case 2
-               fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  depth=%4.1f  evid %16.0f  orid %16.0f <br/> etype=%2s ]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_depth,curr_evid,curr_orid,curr_etype{1});
-       end
-       fprintf(fid, '<name></name> \n');
-       fprintf(fid, '<LookAt><latitude>%7.4f</latitude><longitude>%7.4f</longitude><range>75000</range></LookAt> \n',curr_lat,curr_lon);
-       switch setting.eqlist.symbolrangeKML
-           case 0
-               %no scaling
-               symsize = setting.eqlist.symbolsize;
-           case 1
-               symsize = setting.kml.symbolsizeepicentre.k * curr_mag  + setting.kml.symbolsizeepicentre.d;
-           case 2
-               symsize = setting.kml.symbolsizedepth.k * curr_depth  + setting.kml.symbolsizedepth.d;
-       end
-       fprintf(fid, '<styleUrl>#symbol1</styleUrl><Style><geomScale>%3.1f</geomScale></Style> \n',symsize);
-       fprintf(fid, '<Point><coordinates>%7.4f,%7.4f,0</coordinates></Point>',curr_lon,curr_lat);
-       fprintf(fid, '</Placemark> \n');
-   end
+for k=1:size(datastructhist,2)
+    curr_datestr = datastructhist(k).datestr;
+    curr_mag = datastructhist(k).netmag;
+    curr_evname = datastructhist(k).evname;
+    curr_lat = datastructhist(k).origin.lat;
+    curr_lon = datastructhist(k).origin.lon;
+    curr_orid = datastructhist(k).orid;
+    curr_depth = datastructhist(k).origin.depth;
+    curr_etype = datastructhist(k).etype;
+    curr_evid = datastructhist(k).evid;
+    fprintf(fid, '<Placemark> \n');
+    switch setting.eqlist.format
+        case 1
+            fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  evid %16.0f  orid %16.0f]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_evid,curr_orid);
+        case 2
+            fprintf(fid, '<description><![CDATA[Ort: %s <br/>Ml=%4.1f Date: %s <br/>lat=%7.4f lon=%7.4f  depth=%4.1f  evid %16.0f  orid %16.0f <br/> etype=%2s ]]></description>\n',curr_evname{1},curr_mag,curr_datestr{1},curr_lat,curr_lon,curr_depth,curr_evid,curr_orid,curr_etype{1});
+    end
+    fprintf(fid, '<name></name> \n');
+    fprintf(fid, '<LookAt><latitude>%7.4f</latitude><longitude>%7.4f</longitude><range>75000</range></LookAt> \n',curr_lat,curr_lon);
+    switch setting.eqlist.symbolrangeKML
+        case 0
+            %no scaling
+            symsize = setting.eqlist.symbolsize;
+        case 1
+            symsize = setting.kml.symbolsizeepicentre.k * curr_mag  + setting.kml.symbolsizeepicentre.d;
+        case 2
+            symsize = setting.kml.symbolsizedepth.k * curr_depth  + setting.kml.symbolsizedepth.d;
+    end
+    fprintf(fid, '<styleUrl>#symbol1</styleUrl><Style><geomScale>%3.1f</geomScale></Style> \n',symsize);
+    fprintf(fid, '<Point><coordinates>%7.4f,%7.4f,0</coordinates></Point>',curr_lon,curr_lat);
+    fprintf(fid, '</Placemark> \n');
 end
 fprintf(fid, '</Folder> \n');
 

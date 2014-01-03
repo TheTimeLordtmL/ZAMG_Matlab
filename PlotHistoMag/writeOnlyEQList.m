@@ -16,9 +16,15 @@ if setting.DB.readfromDB==1
     if setting.useshape.useLandgrenzen == 1;
         [datahist,datastructhist,settinghist] = filterDataWithinPolygonShp(datahist,datastructhist,settinghist,'periodhist');
     end
+
+    % // Filter the data for Magnitude or Intensity
+    if setting.filter.Felt == 0
+        [datahist,settinghist,datastructhist] = filterDataMagnitudeExclude(datahist,datastructhist,settinghist);
+    end
+    
     %Filter the data: revome 'km','sm' etc. (see getSetting.m)
     if setting.filter.UseTheFilter==1
-        [datahist,excludedtypehist,settinghist,datastructhist] = filterDataEtypeExclude(datahist,datastructhist,settinghist);
+        [datahist,excludedtypehist,settinghist,datastructhist] = filterDataEtypeExclude(datahist,datastructhist,settinghist,'normal');
         if numel(datahist)<=0
             fprintf('All data were filtered and NO EVENTS remain!\n');
         end
