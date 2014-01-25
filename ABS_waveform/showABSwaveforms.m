@@ -52,6 +52,26 @@ if setting.showSingleStationData == 1 || setting.showTwoStationData == 1 || sett
         end
     end
 end
+
+% show the tools
+if setting.showTools == 1
+    fprintf('[1] get Orid from Evid (%s)\n',setting.db.events);
+    fprintf('[2] empty \n');
+    fprintf('[q] Quit \n');
+    inp = input('>> Please choose your selection [q..quit]\n','s');
+    if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
+        switch str2num(inp)
+            case 1
+                evid = input('>> Please enter a number for evid [q..quit]\n','s');
+                oridOut = getOridFromEvid(setting,str2num(evid));
+                fprintf('The corresponding orid for evid=%10.0f is   %10.0f\n',str2num(evid),oridOut); 
+            case 2
+                % do nothing
+        end
+    end
+    return;
+end
+
 if setting.showEventAcceleration == 1
     showEventAcceleration(setting)
 end

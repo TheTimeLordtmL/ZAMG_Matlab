@@ -1,4 +1,5 @@
 function setting = getSettingsMenuABS(setting)
+%// settingsMenu for showABSwaveforms.m
 
 % // define some databases
 dbAEC = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
@@ -45,6 +46,7 @@ fprintf('[3] Show two station analysis (use specific time frames) \n');
 fprintf('[4] Show two station analysis (use picks from DB) \n');
 fprintf('[5] Batch process and export to ASCII \n');
 fprintf('[6] Plot acceleration for one event (read from %s DB)\n','DBleeer');
+fprintf('[9] Tools (e.g. getOridFromEvid)\n');
 fprintf('[q] Quit \n');
 inp = input('>> Please choose your selection [q..quit]\n','s');
 if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
@@ -77,8 +79,15 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
         case 6
             setting.showEventAcceleration = 1;
             setting.showTwoStationData = 0; 
+        case 9
+            setting.showEventAcceleration = 0;
+            setting.showTwoStationData = 0;  
+            setting.showTools = 1;  
     end
 end
 disp(' ');
+
+
+
 
 

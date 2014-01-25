@@ -29,31 +29,48 @@ for p=1:size(data,1)
     n = dbnrecs(dbsub2);
     switch n
         case 0
+            % found no result
             currdata = data(p,:);
             [currevtime,currevtimestr,currevid] = getEventOriginTime(currdata,setting);
-            evphase = '';  auth{p} = 'n.a.';
+            evphase = '-';  auth{p} = 'n.a.';
             evtimestr{p} = currevtimestr{1};
             evtime(p) = currevtime;
             evid(p) = currevid;            
         case 1
+            % found 1 result (normal)
             [timeflt,evidn,phase,authtmp] = dbgetv(dbsub2,'arrival.time','evid','phase','auth');
-            evtimestr{p} = strtime(dbgetv(dbsub2,'time'));
+            evtimestr{p} = strtime(dbgetv(dbsub2,'arrival.time'));
             auth{p} = authtmp;
             evphase = phase;
             evtime(p) = timeflt;
             evid(p) = evidn;
         otherwise
-            % take the first entry: may be sort for earliest pick?
-            dbsub2 = dbsort(dbsub2,'arrival.time');
-            [timeflt,evidn,phase,authtmp] = dbgetv(dbsub2,'arrival.time','evid','phase','auth');
-            tmptime = strtime(dbgetv(dbsub2,'time'));
-            auth{p} = authtmp;
-            evphase = phase{1};
-            evtimestr{p} = tmptime{1};
-            evtime(p) = timeflt(1);
-            evid(p) = evidn(1);           
+            %found more than 1 results
+            if n > 1
+                % take the first entry: may be sort for earliest pick?
+                dbsub2 = dbsort(dbsub2,'arrival.time');
+                [timeflt,evidn,oridn,phase,authtmp,arid,chan,timeres,deltim] = dbgetv(dbsub2,'arrival.time','evid','orid','phase','auth','arid','chan','timeres','deltim');
+                [indexbest] = getIndexbestForMultiplePicks(timeflt,evidn,oridn,phase,authtmp,arid,chan,timeres,deltim,setting); 
+                tmptime = strtime(dbgetv(dbsub2,'arrival.time'));
+                auth{p} = authtmp{indexbest};
+                evphase = phase{indexbest};
+                evtimestr{p} = tmptime{indexbest};
+                evtime(p) = timeflt(indexbest);
+                evid(p) = evidn(indexbest);
+            end
     end
 
-    fprintf('..add phase %s picked at %s by %s\n',evphase,evtimestr{p},auth{p});
+    fprintf('..add phase %s picked at %s by author %s (%g records found in DB)\n',evphase,evtimestr{p},auth{p},n);
 end
 fprintf('\n');
+
+
+
+
+
+
+
+
+
+
+

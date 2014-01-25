@@ -30,6 +30,7 @@ if size(curTrace,1) >= (ppicksamp+setting.waveforms.tpwindowmax*sps)
 else
     %p-phase ist too short and is taken up to the end of the trace
     indmin = ppicksamp;  indmax = size(curTrace,1);
+    fprintf('P-phase is too short and is taken up to the end of the trace (pick at %g samples, trc len=%g samples)\n',ppicksamp,size(curTrace,1));
 end
 if indmin>=1 && indmax<=size(curTrace,1)
     p = curTrace(indmin:indmax);
@@ -41,11 +42,12 @@ end
 % // get the s-wave data
 % is data larger as s-phase+s-window length?
 if size(curTrace,1) >= (spicksamp+setting.waveforms.tswindowmax*sps)
-    %p-phase has full length as specified in setting.waveforms.tpwindowmax
+    %s-phase has full length as specified in setting.waveforms.tpwindowmax
     indmin = spicksamp;  indmax = spicksamp+setting.waveforms.tswindowmax*sps;
 else
-    %p-phase ist too short and is taken up to the end of the trace
+    %s-phase is too short and is taken up to the end of the trace
     indmin = spicksamp;  indmax = size(curTrace,1);
+    fprintf('S-phase is too short and is taken up to the end of the trace (pick at %g samples, trc len=%g samples)\n',spicksamp,size(curTrace,1));
 end
 if indmin>=1 && indmax<=size(curTrace,1)
     s = curTrace(indmin:indmax);

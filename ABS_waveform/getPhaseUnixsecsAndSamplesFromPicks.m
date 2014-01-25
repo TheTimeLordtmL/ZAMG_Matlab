@@ -22,6 +22,10 @@ settingout.waveforms.timecuts.psamples1 = round((settingout.waveforms.timecuts.p
 settingout.waveforms.timecuts.psamples2 = round((settingout.waveforms.timecuts.punixsecs2 - settingout.waveforms.timecuts.startdataunixsecs2)*sps);
 settingout.waveforms.timecuts.ssamples1 = round((settingout.waveforms.timecuts.sunixsecs1 - settingout.waveforms.timecuts.startdataunixsecs1)*sps);
 settingout.waveforms.timecuts.ssamples2 = round((settingout.waveforms.timecuts.sunixsecs2 - settingout.waveforms.timecuts.startdataunixsecs2)*sps);
+fprintf('[Summary Phases:] getPhaseUnixsecsAndSamplesFromPicks.m \n');
+fprintf('Phases %s: (P1)%s    (S1)%s    P-S(%3.1f)   (t0)%s\n',setting.station1,epoch2str(setting.waveforms.P1,'%G %H:%M:%S'),epoch2str(setting.waveforms.S1,'%G %H:%M:%S'),setting.waveforms.S1-setting.waveforms.P1,epoch2str(setting.waveforms.t01,'%G %H:%M:%S'));
+fprintf('Phases %s: (P2)%s    (S2)%s    P-S(%3.1f)   (t0)%s\n',setting.station2,epoch2str(setting.waveforms.P2,'%G %H:%M:%S'),epoch2str(setting.waveforms.S2,'%G %H:%M:%S'),setting.waveforms.S2-setting.waveforms.P2,epoch2str(setting.waveforms.t02,'%G %H:%M:%S'));
+
 fprintf('[Onsets] Samples P1=%g   P2=%g, S1=%g   S2=%g  \n',settingout.waveforms.timecuts.psamples1,settingout.waveforms.timecuts.psamples2,settingout.waveforms.timecuts.ssamples1,settingout.waveforms.timecuts.ssamples2);
 
 

@@ -9,25 +9,29 @@ function showTwoStationData2New(setting)
 % get begin/end for the timestring: eg. '_2013-09-20 02:06:35_';
 % setting.saveDBmode = 1; aus PlotHistMag.m
 setting.waveforms.orid1 = getOridFromEvid(setting,setting.waveforms.evid1);
-setting.waveforms.orid2 = getOridFromEvid(setting,setting.waveforms.evid2);  
+setting.waveforms.orid2 = getOridFromEvid(setting,setting.waveforms.evid2); 
+setting.waveforms.t01 = getOriginTimeFromOrid(setting,setting.waveforms.orid1);
+setting.waveforms.t02 = getOriginTimeFromOrid(setting,setting.waveforms.orid2);
 
 %// get the start/end time for the data
 %//DATA 1 & event 1
+setting = applyTempsettingsTwoStation(setting,1);
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'P');
 setting.waveforms.P1 = picktime; 
 setting.time.start1 = timestart;   setting.time.end1 = timeend;
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'S');
 setting.waveforms.S1 = picktime; 
-setting = applyTempsettingsTwoStation(setting,1);
+%setting = applyTempsettingsTwoStation(setting,1);
 [dataV1,dataA1,setting,error1] = getTracesfromAntelope(setting);
 
 %//DATA 2 & event 2
+setting = applyTempsettingsTwoStation(setting,2);
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'P');
 setting.waveforms.P2 = picktime; 
 setting.time.start2 = timestart;   setting.time.end2 = timeend;
 [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'S');
 setting.waveforms.S2 = picktime;
-setting = applyTempsettingsTwoStation(setting,2);
+%setting = applyTempsettingsTwoStation(setting,2);
 [dataV2,dataA2,setting,error2] = getTracesfromAntelope(setting);
 
 [setting] = getPhaseUnixsecsAndSamplesFromPicks(setting);
@@ -65,10 +69,6 @@ if error1==0 && error2==0
             if setting.intitialunit~='V'
                 fprintf('[warning] initial unit set to ''V''.]\n');
                 setting.intitialunit = 'V';
-            else
-                fprintf('[warning] initial unit not clear (the same) for 1st and 2nd station (1=%s, 2=%s).]\n',setting.intitialunit1,setting.intitialunit2);
-                fprintf('[warning] initial unit set to ''V''.]\n');
-                setting.intitialunit = 'V';
             end
         end
     end
@@ -95,16 +95,16 @@ if error1==0 && error2==0
         end
         if setting.intitialunit == 'V'
             ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
-            curTrace = dataV1{p}; [psig,ssig,noise] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig,setting.samplerate{p});
-            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig,setting.samplerate{p});
-            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise,setting.samplerate{p});
+            curTrace = dataV1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.samplerate{p});
+            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.samplerate{p});
+            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.samplerate{p});
             
             ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
-            curTrace = dataV2{p};  [psig,ssig,noise] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig,setting.samplerate{p});
-            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig,setting.samplerate{p});
-            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise,setting.samplerate{p});
+            curTrace = dataV2{p};  [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
+            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.samplerate{p});
+            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.samplerate{p});
+            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.samplerate{p});
         end
     
         %get displacement spectra from integration
@@ -128,14 +128,25 @@ if error1==0 && error2==0
     if setting.waveforms.plotwaveforms == 1
         if setting.waveforms.useDisplacement == 0
             if setting.intitialunit == 'V'
+                testSignalExistance(psig1,ssig1,noise1,psig2,ssig2,noise2,setting);
                 plotTwoStationWaveformsPsigSsigNoise(psig1,ssig1,noise1,psig2,ssig2,noise2,dataV1,dataV2,setting);                
             end
             if setting.intitialunit == 'A'
+                testSignalExistance(psig1,ssig1,noise1,psig2,ssig2,noise2,setting);
                 plotTwoStationWaveformsPsigSsigNoise(psig1,ssig1,noise1,psig2,ssig2,noise2,dataA1,dataA2,setting);
             end
         end
         if setting.waveforms.useDisplacement == 1
+            testSignalExistance(psig1disp,ssig1disp,noise1disp,psig2disp,ssig2disp,noise2disp,setting);
             plotTwoStationWaveformsPsigSsigNoise(psig1disp,ssig1disp,noise1disp,psig2disp,ssig2disp,noise2disp,dataDout1,dataDout2,setting);
+        end
+    else
+        if setting.waveforms.useDisplacement == 0
+            testSignalExistance(psig1,ssig1,noise1,psig2,ssig2,noise2);
+        end
+        if setting.waveforms.useDisplacement == 1
+            testSignalExistance(psig1disp,ssig1disp,noise1disp,psig2disp,ssig2disp,noise2disp);
+            
         end
     end
     
@@ -224,4 +235,32 @@ timeend = cellstrEnd{1};
 fprintf('[Time] Begin/End time is defined by from p-wave onset, noise length (tmin) and p-wave onset-tmin+timewindow \n');
 fprintf('       Begin: %s  End: %s \n',timestart,timeend);
 
+
+
+
+function testSignalExistance(psig1,ssig1,noise1,psig2,ssig2,noise2,setting)
+
+for k=1:numel(setting.comp1)
+    if isempty(psig1{k}) || sum(isnan(psig1{k}))>0
+        fprintf('warning: P-wave signals 1 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(psig1{k})),setting.comp1{k});
+    end
+    if isempty(ssig1{k}) || sum(isnan(ssig1{k}))>0
+        fprintf('warning: S-wave signals 1 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(ssig1{k})),setting.comp1{k});
+    end
+    if isempty(noise1{k}) || sum(isnan(noise1{k}))>0
+        fprintf('warning: Noise signals 1 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(noise1{k})),setting.comp1{k});
+    end
+end
+
+for k=1:numel(setting.comp2)
+    if isempty(psig2{k}) || sum(isnan(psig2{k}))>0
+        fprintf('warning: P-wave signals 2 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(psig2{k})),setting.comp2{k});
+    end
+    if isempty(ssig2{k}) || sum(isnan(ssig2{k}))>0
+        fprintf('warning: S-wave signals 2 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(ssig2{k})),setting.comp2{k});
+    end
+    if isempty(noise2{k}) || sum(isnan(noise2{k}))>0
+        fprintf('warning: Noise signals 2 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(noise2{k})),setting.comp2{k});
+    end
+end
 
