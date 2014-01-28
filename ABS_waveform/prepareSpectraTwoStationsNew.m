@@ -10,10 +10,12 @@ horzCompFrequ1 = [];  horzCompFrequ2 = [];  horzNoise1 = [];  horzNoise2 = []; z
   
 % prepare the Z-Komponent
 if numel(psig1)>=1 && numel(psig2)>=1
-    specvec1 = psig1{1}.frequ;
-    specvec2 = psig2{1}.frequ;
+    specvec1.psig = psig1{1}.frequ;
+    specvec2.psig = psig2{1}.frequ;
     if numel(noise1)>=1 && numel(noise2)>=1
         zNoise1 = noise1{1}.fft;  zNoise2 = noise2{1}.fft;
+        specvec1.noise = noise1{1}.frequ;
+        specvec2.noise = noise2{1}.frequ;
     end
     if setting.waveforms.plotSignalSpectraReducedByNoise == 1
         if numel(noise1)>=1 && numel(noise2)>=1
@@ -37,12 +39,8 @@ end
 
 % prepare the N & E-Komponent
 if numel(ssig1)>=3 && numel(ssig2)>=3
-    if isempty(specvec1)
-        specvec1 = ssig1{2}.frequ;
-    end
-    if isempty(specvec2)
-        specvec2 = ssig2{2}.frequ;
-    end
+    specvec1.ssig = ssig1{2}.frequ;
+    specvec2.ssig = ssig2{2}.frequ;
     if setting.waveforms.plotSignalSpectraReducedByNoise == 1
         if numel(noise1)>=3 && numel(noise2)>=3
             nCompFrequ1 = ssig1{2}.fft - noise1{2}.fft ;
@@ -69,5 +67,7 @@ if numel(ssig1)>=3 && numel(ssig2)>=3
     horzCompFrequ2 = (nCompFrequ2+eCompFrequ2)/2;
     horzNoise1 = (noise1{2}.fft+noise1{3}.fft)/2; 
     horzNoise2 = (noise2{2}.fft+noise2{3}.fft)/2;
+    specvec1.horznoise = noise1{2}.frequ;
+    specvec2.horznoise = noise2{2}.frequ;
 end
 

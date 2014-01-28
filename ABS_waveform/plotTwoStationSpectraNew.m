@@ -29,8 +29,8 @@ figure('Position',[setting.src.left setting.src.bottom setting.src.width setting
 %// plot P-wave spectra
 subplot(1,2,1); hold on;
 if setting.waveforms.plotNoiseSpectra == 1
-    loglog(specvec1(:),znoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
-    loglog(specvec2(:),znoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
+    loglog(specvec1.noise(:),znoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
+    loglog(specvec2.noise(:),znoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
     tmplabel{1} = sprintf('Noise1   (evid %10.0f)',setting.waveforms.evid1);
     tmplabel{2} = sprintf('Noise2   (evid %10.0f)',setting.waveforms.evid2);
     tmplabel{3} = sprintf('%s1 (Z) %s',setting.station1,setting.time.start1);
@@ -39,51 +39,55 @@ else
     tmplabel{1} = sprintf('%s1 (Z) %s',setting.station1,setting.time.start1);
     tmplabel{2} = sprintf('%s2 (Z) %s',setting.station2,setting.time.start2);
 end
-loglog(specvec1(:),pspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
-loglog(specvec2(:),pspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
+loglog(specvec1.psig(:),pspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
+loglog(specvec2.psig(:),pspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
 
 grid on;
 % set X and Y Limits
 if setting.waveforms.useManualXlimit==1 && setting.waveforms.fixPSamplSpectra == 1
     xlim(setting.waveforms.manualXlimit);
 else
-    xlim([min(specvec1) max(specvec1)]);
+    tmpspecvec = [specvec1.psig specvec1.noise];
+    xlim([min(tmpspecvec) max(tmpspecvec)]);
 end
 if setting.waveforms.useManualYlimit==1 && setting.waveforms.fixPSamplSpectra == 1
     ylim(setting.waveforms.manualYlimit);
 else
     ylim([limYMin1 limYMax1]);
 end
-ylabel('P-wave spectral amplitude');    xlabel('frequency (Hz)');
+ylabelstr = sprintf('P-wave spectral amplitude (%s) from %s',setting.unit.value,setting.intitialunit);
+ylabel(ylabelstr);    xlabel('frequency (Hz)');
 set(gca,'XScale','log');   set(gca,'YScale','log');
 legend(tmplabel,numel(tmplabel));
 
 % // plot S.wave spectra 
 subplot(1,2,2); hold on;
 if setting.waveforms.plotNoiseSpectra == 1
-    loglog(specvec1(:),horznoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
-    loglog(specvec2(:),horznoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
+    loglog(specvec1.horznoise(:),horznoisespectra1(:),'Color',colnoise1,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
+    loglog(specvec2.horznoise(:),horznoisespectra2(:),'Color',colnoise2,'LineWidth',setting.waveforms.plotSizeLineSpectraNoise);
     tmplabel{3} = sprintf('%s1 (N&E) %s',setting.station1,setting.time.start1);
     tmplabel{4} = sprintf('%s2 (N&E) %s',setting.station2,setting.time.start2);
 else
     tmplabel{1} = sprintf('%s1 (N&E) %s',setting.station1,setting.time.start1);
     tmplabel{2} = sprintf('%s2 (N&E) %s',setting.station2,setting.time.start2);
 end
-loglog(specvec1(:),sspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
-loglog(specvec2(:),sspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
+loglog(specvec1.ssig(:),sspectra1(:),'Color',colsig1,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
+loglog(specvec2.ssig(:),sspectra2(:),'Color',colsig2,'LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
 grid on;
 % set X and Y Limits
 if setting.waveforms.useManualXlimit==1 && setting.waveforms.fixPSamplSpectra == 1
     xlim(setting.waveforms.manualXlimit);
 else
-    xlim([min(specvec2) max(specvec2)]);
+    tmpspecvec = [specvec2.ssig specvec2.horznoise];
+    xlim([min(tmpspecvec) max(tmpspecvec)]);
 end
 if setting.waveforms.useManualYlimit==1 && setting.waveforms.fixPSamplSpectra == 1
     ylim(setting.waveforms.manualYlimit);
 else
     ylim([limYMin2 limYMax2]);
 end
-ylabel('S-wave spectral amplitude');    xlabel('frequency (Hz)');
+ylabelstr = sprintf('S-wave spectral amplitude (%s) from %s',setting.unit.value,setting.intitialunit);
+ylabel(ylabelstr);    xlabel('frequency (Hz)');
 set(gca,'XScale','log');   set(gca,'YScale','log');
 legend(tmplabel,numel(tmplabel));
 

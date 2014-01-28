@@ -61,7 +61,7 @@ for z=1:numel(setting.comp)
      trapply_calib(tr);
      data{z} = trextract_data(tr);
      trdestroy(tr);
-     fprintf('..%s  %s found with %4.0f samprate and %g nsamp \n',strstation,curr_component,samprate,nsamp);
+     fprintf('..%s  %s found with %4.0f samprate and %g nsamp (from %s to %s)\n',strstation,curr_component,samprate,nsamp,setting.time.start,setting.time.end);
      %subplot(3,1,z);
      %plot(data);
      %legend();

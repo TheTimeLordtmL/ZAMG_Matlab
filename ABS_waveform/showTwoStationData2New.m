@@ -16,23 +16,26 @@ setting.waveforms.t02 = getOriginTimeFromOrid(setting,setting.waveforms.orid2);
 %// get the start/end time for the data
 %//DATA 1 & event 1
 setting = applyTempsettingsTwoStation(setting,1);
-[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'P');
+[timestart1,timeend1,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'P');
 setting.waveforms.P1 = picktime; 
-setting.time.start1 = timestart;   setting.time.end1 = timeend;
-[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'S');
+setting.time.start1 = timestart1;   setting.time.end1 = timeend1;
+[~,~,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid1,setting.station1,'S');
 setting.waveforms.S1 = picktime; 
-%setting = applyTempsettingsTwoStation(setting,1);
+setting = applyTempsettingsTwoStation(setting,1);
 [dataV1,dataA1,setting,error1] = getTracesfromAntelope(setting);
+setting = saveIndividualSampleRate(setting,1); setting = clearMainSampleRate(setting);
 
 %//DATA 2 & event 2
 setting = applyTempsettingsTwoStation(setting,2);
-[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'P');
+[timestart2,timeend2,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'P');
 setting.waveforms.P2 = picktime; 
-setting.time.start2 = timestart;   setting.time.end2 = timeend;
-[timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'S');
+setting.time.start2 = timestart2;   setting.time.end2 = timeend2;
+[~,~,picktime] = getStartEndTimeFromPhases(setting,setting.waveforms.orid2,setting.station2,'S');
 setting.waveforms.S2 = picktime;
-%setting = applyTempsettingsTwoStation(setting,2);
+setting = applyTempsettingsTwoStation(setting,2);
 [dataV2,dataA2,setting,error2] = getTracesfromAntelope(setting);
+setting = saveIndividualSampleRate(setting,2); setting = clearMainSampleRate(setting);
+clear timestart1 timestart2 timeend1 timeend2;
 
 [setting] = getPhaseUnixsecsAndSamplesFromPicks(setting);
 
@@ -46,7 +49,9 @@ if error1==0 && error2==0
     [dataV1,dataA1,setting] = applyCalibandSubtractMean(dataV1,dataA1,setting);
     
     % add artificial velocity or accelerometer data by int or diff
+    setting = restoreMainSampleRate(setting,1);
     [dataV1,dataA1,dataDout1,setting] = getRemainingAccOrVeldata(dataV1,dataA1,setting);
+    setting = clearMainSampleRate(setting);
     
     %//DATA 2
     setting = applyTempsettingsTwoStation(setting,2);
@@ -57,7 +62,9 @@ if error1==0 && error2==0
     [dataV2,dataA2,setting] = applyCalibandSubtractMean(dataV2,dataA2,setting);
     
     % add artificial velocity or accelerometer data by int or diff
+    setting = restoreMainSampleRate(setting,2);
     [dataV2,dataA2,dataDout2,setting] = getRemainingAccOrVeldata(dataV2,dataA2,setting);
+    setting = clearMainSampleRate(setting);
     
     if setting.intitialunit1=='A' && setting.intitialunit2=='A'
         if setting.intitialunit~='A'
@@ -82,44 +89,44 @@ if error1==0 && error2==0
         % get V oder A as is from original data
         if setting.intitialunit == 'A'
             ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
-            curTrace = dataA1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.samplerate{p});
-            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.samplerate{p});
-            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.samplerate{p});
+            curTrace = dataA1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps1{p},ppicksamp,spicksamp);
+            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.sps1{p});
+            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.sps1{p});
+            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.sps1{p});
             
             ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
-            curTrace = dataA2{p}; [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.samplerate{p});
-            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.samplerate{p});
-            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.samplerate{p});
+            curTrace = dataA2{p}; [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps2{p},ppicksamp,spicksamp);
+            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.sps2{p});
+            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.sps2{p});
+            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.sps2{p});
         end
         if setting.intitialunit == 'V'
             ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
-            curTrace = dataV1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.samplerate{p});
-            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.samplerate{p});
-            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.samplerate{p});
+            curTrace = dataV1{p}; [psig1{p},ssig1{p},noise1{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps1{p},ppicksamp,spicksamp);
+            [pSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(psig1{p},setting.sps1{p});
+            [sSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(ssig1{p},setting.sps1{p});
+            [noiseSigSpec1{p},maxampl1{p}] = getSpectrumfromCurData(noise1{p},setting.sps1{p});
             
             ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
-            curTrace = dataV2{p};  [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.samplerate{p});
-            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.samplerate{p});
-            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.samplerate{p});
+            curTrace = dataV2{p};  [psig2{p},ssig2{p},noise2{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps2{p},ppicksamp,spicksamp);
+            [pSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(psig2{p},setting.sps2{p});
+            [sSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(ssig2{p},setting.sps2{p});
+            [noiseSigSpec2{p},maxampl2{p}] = getSpectrumfromCurData(noise2{p},setting.sps2{p});
         end
     
         %get displacement spectra from integration
         if setting.waveforms.useDisplacement == 1
             ppicksamp = setting.waveforms.timecuts.psamples1; spicksamp = setting.waveforms.timecuts.ssamples1;
-            curTrace = dataDout1{p};  [psig1disp{p},ssig1disp{p},noise1disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [dspSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(psig1disp{p},setting.samplerate{p});
-            [dssSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(ssig1disp{p},setting.samplerate{p});
-            [dsnoiseSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(noise1disp{p},setting.samplerate{p});
+            curTrace = dataDout1{p};  [psig1disp{p},ssig1disp{p},noise1disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps1{p},ppicksamp,spicksamp);
+            [dspSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(psig1disp{p},setting.sps1{p});
+            [dssSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(ssig1disp{p},setting.sps1{p});
+            [dsnoiseSigSpec1{p},maxampld1{p}] = getSpectrumfromCurData(noise1disp{p},setting.sps1{p});
             
             ppicksamp = setting.waveforms.timecuts.psamples2; spicksamp = setting.waveforms.timecuts.ssamples2;
-            curTrace = dataDout2{p}; [psig2disp{p},ssig2disp{p},noise2disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.samplerate{p},ppicksamp,spicksamp);
-            [dspSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(psig2disp{p},setting.samplerate{p});
-            [dssSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(ssig2disp{p},setting.samplerate{p});
-            [dsnoiseSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(noise2disp{p},setting.samplerate{p});
+            curTrace = dataDout2{p}; [psig2disp{p},ssig2disp{p},noise2disp{p}] = getPSnoiseDataFromTimeFrame(curTrace,setting,setting.sps2{p},ppicksamp,spicksamp);
+            [dspSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(psig2disp{p},setting.sps2{p});
+            [dssSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(ssig2disp{p},setting.sps2{p});
+            [dsnoiseSigSpec2{p},maxampld2{p}] = getSpectrumfromCurData(noise2disp{p},setting.sps2{p});
         end
      end
     % FOR each component (ende)
@@ -202,7 +209,7 @@ switch flag
 end
 
 
-function [timestart,timeend,evtime] = getStartEndTimeFromPhases(setting,orid,station,phase)
+function [timestart,timeend,picktime] = getStartEndTimeFromPhases(setting,orid,station,phase)
 % use the orid to find the phases. based on the arrivals select the data
 
 setting.waveforms.station = station;
@@ -224,16 +231,20 @@ if setting.waveforms.timespanfrompicks == 1
     fprintf('get the phase onset times for the first arrival(s) \n');
     switch phase
         case 'P'
-            [evtime,evtimestr,evid] = getFirstArrival(data,setting);
+            [picktime,picktimestr,evid] = getFirstArrival(data,setting);
+            % Data begin/end is defined from p-wave onset, noise length (tmin) and
+            % p-wave onset-tmin+timewindow.
+            [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(picktime,picktimestr,setting);
+            timestart = cellstrBegin{1};        timeend = cellstrEnd{1};
+            fprintf('[Time] Begin/End time is defined by from p-wave onset, noise length (tmin) and p-wave onset-tmin+timewindow \n');
+            fprintf('       Begin: %s  End: %s \n',timestart,timeend);
         case 'S'
-            [evtime,evtimestr,evid] = getShearwaveArrival(data,setting);  
+            [picktime,picktimestr,evid] = getShearwaveArrival(data,setting);
+            %get dummy result for S-wave! !!
+            cellstrEnd{1} = [];             cellstrBegin{1} = [];
+            timestart = cellstrBegin{1};        timeend = cellstrEnd{1};
     end
-    [cellstrEnd,cellstrBegin] = getBeginEndTimeFromPicks(evtime,evtimestr,setting);
 end
-timestart = cellstrBegin{1};
-timeend = cellstrEnd{1};
-fprintf('[Time] Begin/End time is defined by from p-wave onset, noise length (tmin) and p-wave onset-tmin+timewindow \n');
-fprintf('       Begin: %s  End: %s \n',timestart,timeend);
 
 
 
@@ -263,4 +274,40 @@ for k=1:numel(setting.comp2)
         fprintf('warning: Noise signals 2 may do not contain data or contain %g NaNs (%s)\n',sum(isnan(noise2{k})),setting.comp2{k});
     end
 end
+
+
+
+function setting = saveIndividualSampleRate(setting,flag)
+
+
+for k=1:numel(setting.samplerate)
+    switch flag
+        case 1
+            setting.sps1{k} = setting.samplerate{k};
+        case 2
+            setting.sps2{k} = setting.samplerate{k};
+    end
+end
+
+
+
+function setting = restoreMainSampleRate(setting,flag)
+for k=1:numel(setting.samplerate)
+    switch flag
+        case 1
+            setting.samplerate{k} = setting.sps1{k};
+        case 2
+            setting.samplerate{k} = setting.sps2{k};
+    end
+end
+
+
+function setting = clearMainSampleRate(setting)
+for k=1:numel(setting.samplerate)
+    setting.samplerate{k} = 0; %delete variable since it might be used otherwise
+end
+
+
+
+
 

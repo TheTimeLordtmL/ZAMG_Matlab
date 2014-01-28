@@ -28,6 +28,10 @@ for p=1:1
     plot([setting.waveforms.timecuts.psamples1 setting.waveforms.timecuts.psamples1],[min(datay1) max(datay1)],':k');
     plot([setting.waveforms.timecuts.ssamples1 setting.waveforms.timecuts.ssamples1],[min(datay1) max(datay1)],':k');
     clear datay1 pw1 sw1 no1;
+    ylabelstr = sprintf('amplitude (%s) from %s',setting.unit.value,setting.intitialunit);
+    ylabel(ylabelstr);    xlabel('samples');
+    legendstr = sprintf('evid=%10.0f,  %s (%s)',setting.waveforms.evid1,setting.station1,setting.comp1{p});
+    legend(legendstr,1);
     
     subplot(2,1,2); hold on;
     datay2 = data2{p}; pw2 = psig2{p};  sw2 = ssig2{p}; no2 = noise2{p};
@@ -37,5 +41,9 @@ for p=1:1
     plot([setting.waveforms.timecuts.ssamples2:setting.waveforms.timecuts.ssamples2+size(sw2,1)-1],sw2(:),'Color','black','LineWidth',setting.waveforms.plotSizeLineSpectraSignal);
     plot([setting.waveforms.timecuts.psamples2 setting.waveforms.timecuts.psamples2],[min(datay2) max(datay2)],':k');
     plot([setting.waveforms.timecuts.ssamples2 setting.waveforms.timecuts.ssamples2],[min(datay2) max(datay2)],':k');
-    clear datay2 pw2 sw2 no2;    
+    clear datay2 pw2 sw2 no2;
+    ylabelstr = sprintf('amplitude (%s) from %s',setting.unit.value,setting.intitialunit);
+    ylabel(ylabelstr);    xlabel('samples');
+    legendstr = sprintf('evid=%10.0f,  %s (%s)',setting.waveforms.evid2,setting.station2,setting.comp2{p});
+    legend(legendstr,1);
 end

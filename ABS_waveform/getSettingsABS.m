@@ -89,23 +89,27 @@ setting.intitialunit1 = setting.intitialunit;
 setting.unit.value1 = setting.unit.value;
 setting.twostation.showdisplacement = 0;  %show waveforms in displacement
 setting.comp1{1} = 'HHZ'; setting.comp1{2} = 'HHN'; setting.comp1{3} = 'HHE';
+%setting.comp1{1} = 'HHZ_15'; setting.comp1{2} = 'HHN_15'; setting.comp1{3} = 'HHE_15';
 %setting.comp1{1} = 'HNZ'; setting.comp1{2} = 'HNN'; setting.comp1{3} = 'HNE';
 %setting.comp1{1} = 'HLZ'; setting.comp1{2} = 'HLN'; setting.comp1{3} = 'HLE';
 setting.station1 = 'CONA';  %HH*
 %setting.station1 = 'WIWA'; %HN* 
 %setting.comp1{1} = 'HNZ';
+setting.sps1{1} = 0;  setting.sps1{2} = 0;    setting.sps1{3} = 0 ; 
 
 setting.time.start2 = '_2013-10-02 17:17:35_';  setting.time.end2 ='_2013-10-02 17:18:35_'; setting.nameevent='Ebreichsdorf M4.2 20131002';
 setting.intitialunit2 = setting.intitialunit;  
 setting.unit.value2 = setting.unit.value;
-setting.comp2{1} = setting.comp1{1}; setting.comp2{2} = setting.comp1{2} ; setting.comp2{3} = setting.comp1{3};
+setting.comp2{1} = 'HHZ'; setting.comp2{2} = 'HHN'; setting.comp2{3} = 'HHE';
+%setting.comp2{1} = setting.comp1{1}; setting.comp2{2} = setting.comp1{2} ; setting.comp2{3} = setting.comp1{3};
 %setting.comp2{1} = 'HNZ'; setting.comp2{2} = 'HNN'; setting.comp2{3} = 'HNE';
 %setting.station2 = setting.station1;  %HH*
 setting.station2 = 'CSNA'; %HN* 
 %setting.comp2{1} = 'HNZ';
+setting.sps2{1} = 0;  setting.sps2{2} = 0;    setting.sps2{3} = 0; 
 
 % plot waveforms (twoStationAnalyses)
-setting.waveforms.evid1 = 52587546;  %ebr20130920= 52587546 (1215203); ebr20131002= 52588537 (1217191);
+setting.waveforms.evid1 = 52588537;  %ebr20130920= 52587546 (1215203); ebr20131002= 52588537 (1217191);
 setting.waveforms.evid2 = 52588537;  %;
 setting.DB.DBpath = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1'; %db to get evid, orid, etc.
 setting.waveforms.P1 = 0; setting.waveforms.P2 = 0; % P-wave arrival time
@@ -113,8 +117,8 @@ setting.waveforms.S1 = 0; setting.waveforms.S2 = 0; % S-wave arrival time
 setting.waveforms.t01 = 0; setting.waveforms.t02 = 0; % origin time
 setting.waveforms.timespanfromtnull = 0;    %window size specified from tnull + timewindow
 setting.waveforms.timespanfrompicks = 1;    %window size specified from picks-tmin + timewindow: only 1 works now!!!
-setting.waveforms.timewindow = 15;          %time window (secs) e.g. 35, 15(cona,ebr) 25(arsa,ebr)  
-setting.waveforms.tmin = 3;                 %time before picks (secs) (first arrival) - used to get data from db (this is  maximal time for noise, tnoisesubtract is subtracted) e.g. 3secs 
+setting.waveforms.timewindow = 35;          %time window (secs) e.g. 35, 35(cona,ebr) 45(arsa,ebr)  
+setting.waveforms.tmin = 8;                 %time before picks (secs) (first arrival) - used to get data from db (this is  maximal time for noise, tnoisesubtract is subtracted) e.g. 3secs 
 setting.waveforms.tnoisesubtract = 0.4;       %time (s) that is subtracted from p.onset to get the noise length.
 setting.waveforms.tpwindowmax = 3;          %time (s) that is maximal used to get p-wave spectra
 setting.waveforms.tswindowmax = 4;          %time (s) that is maximal used to get s-wave spectra
