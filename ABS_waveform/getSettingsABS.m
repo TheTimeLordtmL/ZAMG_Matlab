@@ -109,8 +109,8 @@ setting.station2 = 'CSNA'; %HN*
 setting.sps2{1} = 0;  setting.sps2{2} = 0;    setting.sps2{3} = 0; 
 
 % plot waveforms (twoStationAnalyses)
-setting.waveforms.evid1 = 52588537;  %ebr20130920= 52587546 (1215203); ebr20131002= 52588537 (1217191);
-setting.waveforms.evid2 = 52588537;  %;
+setting.waveforms.evid1 = 52587546;  %ebr20130920= 52587546 (1215203); ebr20131002= 52588537 (1217191);
+setting.waveforms.evid2 = 52587546;  %;
 setting.DB.DBpath = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1'; %db to get evid, orid, etc.
 setting.waveforms.P1 = 0; setting.waveforms.P2 = 0; % P-wave arrival time
 setting.waveforms.S1 = 0; setting.waveforms.S2 = 0; % S-wave arrival time

@@ -36,7 +36,10 @@ end
 
 writeBebenListe(setting,datastructhist);
 if setting.eqlist.format ~= 99
-    writeBebenOnlytoKML(setting,datastructhist)
+    writeBebenOnlytoKML(setting,datastructhist);
+end
+if setting.eqlist.showHistplot == 1 
+    showSimpleHistplotEQList(setting,datastructhist);
 end
 
 

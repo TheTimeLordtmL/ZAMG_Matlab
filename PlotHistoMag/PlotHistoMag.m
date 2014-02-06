@@ -23,13 +23,15 @@ while strcmp(inp,'q') == 0 && strcmp(inp,'0') ==  0
         dbseismo06 = '/net/zagsun17/export/home/seismo/antelope/db/SEISMO_2006';
         dbseismo05 = '/net/zagsun17/export/home/seismo/antelope/db/SEISMO_2005';
         dbzagsun17 = '/net/zagsun17/export/home/seismo/antelope/db/zagsun17';
+        dbzagsun17AEC = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
         fprintf('run %g:  ..read the data from \n',u);
         fprintf('[1] %s \n',setting.DB.DBpath);
         fprintf('[2] %s \n',setting.DB.refDBpath);
-        fprintf('[3] %s \n',dbzagsun17);
-        fprintf('[4] %s \n',dbseismo07);
-        fprintf('[5] %s \n',dbseismo06);
-        fprintf('[6] %s \n',dbseismo05);
+        fprintf('[3] %s \n',dbzagsun17AEC);
+        fprintf('[4] %s \n',dbzagsun17);
+        fprintf('[5] %s \n',dbseismo07);
+        fprintf('[6] %s \n',dbseismo06);
+        fprintf('[7] %s \n',dbseismo05);
         fprintf('[0] write all %g runs to a file and show the stats \n\n',u-1);
         inp = input('>> Please select the database [q..quit]\n','s');
         if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
@@ -39,12 +41,14 @@ while strcmp(inp,'q') == 0 && strcmp(inp,'0') ==  0
                 case 2
                     setting.DB.DBpath = setting.DB.refDBpath;
                 case 3
-                    setting.DB.DBpath = dbzagsun17;
+                    setting.DB.DBpath = dbzagsun17AEC;             
                 case 4
-                    setting.DB.DBpath = dbseismo07;
+                    setting.DB.DBpath = dbzagsun17;
                 case 5
-                    setting.DB.DBpath = dbseismo06;
+                    setting.DB.DBpath = dbseismo07;
                 case 6
+                    setting.DB.DBpath = dbseismo06;
+                case 7
                     setting.DB.DBpath = dbseismo05;
                 case 0
                     %do nothing

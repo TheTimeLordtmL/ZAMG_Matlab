@@ -16,8 +16,13 @@ setting.DB.readfromDB = 1;     %if eq's are read from a DB
 
 % time start/end - normal data
 %setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; %schwaz
-%setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2101-01-01 00:00_'; 
-setting.time.start = '_2013-09-01 00:00_';  setting.time.end = '_2014-01-01 00:00_';
+%setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; 
+setting.time.start = '_2012-01-01 00:00_';  setting.time.end = '_2013-01-01 00:00_';
+
+%setting.time.start = '_1972-01-01 00:00_';  setting.time.end = '_1973-01-01 00:00_';  %seebenstein 1972 (16.4-apr)
+%setting.time.start = '_1938-09-01 00:00_';  setting.time.end = '_1939-07-01 00:00_';  %ebreichsdorf 1938 (8.11-nov)
+%setting.time.start = '_1976-01-01 00:00_';  setting.time.end = '_1977-04-01 00:00_';  %Friaul 1976 (6.5.-mai)
+
 %setting.time.start = '_2011-11-30 15:00_';  setting.time.end = '_2011-12-03 10:00_'; %Hall
 %setting.time.start = '_2010-01-01 00:00_';  setting.time.end = '_2011-01-01 00:00_'; 
 %setting.time.start = '_2011-01-01 00:00_';  setting.time.end = '_2012-01-01 00:00_'; 
@@ -37,12 +42,13 @@ setting.DB.DBpath = '/net/zagmac1/Volumes/Daten/seismo/antelope/db/zagmac1';
 %setting.DB.DBpath = '/net/zagsun17/export/home/seismo/antelope/db/zagsun17';  
 %setting.DB.refDBpath = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
 setting.DB.refDBpath = '/net/zagsun26/iscsi/homes/rt/antelope/bebenkatalog/AEC_css30';
+% dbzagsun17AEC = '/net/zagsun17/export/home/seismo/bebenkatalog/AEC';
 
 % //FILE INPUT
 setting.filepath = 'ereignisse20042011AT.xyz';     
 
 setting.xticknumber = 9;   setting.fontsize = 17;  setting.fontsizeaxis = 16;  setting.fontsizetitle = 18;
-setting.temporalresolution = 'j';    %d..day   h..hour   m..month  j..jahr
+setting.temporalresolution = 'd';    %d..day   h..hour   m..month  j..jahr
 setting.plotInfoSubplot = 1;         % 0/1 outputs statistics on the figure bottom
 setting.plotAutoscaleOn = 1;         % 0/1 outputs statistics on the figure bottom
 setting.filter.UseTheFilter = 1;        %use the eType filter option? (km sm sr - etc.)
@@ -90,8 +96,10 @@ setting.eqlist.minintensity = 3;%minimal values for the intensities I0
 setting.eqlist.useinensities = 0;%flag for the use of intensities
 %                                         1..scale with magnitude, 0..no, scale 2..scale with depth
 setting.eqlist.symbolsize = 0.5;
+setting.eqlist.showHistplot = 1;        %shows magnitude/intensity histogram
 setting.kml.symbolsizedepth.d = 0.3;
 setting.kml.symbolsizedepth.k = 0.04;
+
 
 %// analyze phases
 setting.phases.maximumdelta = 1.5;  % distance in degree

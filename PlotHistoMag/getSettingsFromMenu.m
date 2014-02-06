@@ -76,7 +76,8 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
         case 2
             setting.DB.userectangle = 1;  setting.useshape.useLandgrenzen = 0;
             fprintf('[1] Emilia Romagna   [2] Vogtland    [3] Schwaz    [4] Molln   \n');
-            fprintf('[5] Hall            [6] Ebreichsdorf       [7] empty    [8] empty   \n');
+            fprintf('[5] Hall            [6] Ebreichsdorf       [7] Seebenstein    [8] empty   [9] reserved \n');
+            fprintf('[10] empty            [11] Friaul       [12] empty    [13] empty   \n');
             fprintf('[0] User Input \n');
             inp2 = input('>> Please define the geographic region [q..quit]\n','s');
             if isnumeric(str2num(inp2)) && ~strcmp(inp2,'q')
@@ -97,13 +98,18 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(5,setting);
                         strregion = 'Hall';                          
                     case 6
-                        %neue Region 
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(6,setting);
                         strregion = 'Ebreichsdorf';    
                     case 7
-                        %neue Region
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(7,setting);
+                        strregion = 'Seebenstein';    
                     case 8
-                        %neue Region                         
+                        %neue Region  
+                    case 9
+                        %reserved! see   getUserDefinedRectangleVals.m                     
+                    case 11
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(11,setting);
+                        strregion = 'Friaul';    
                     case 0
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(0,setting);
                         strregion = 'B-L';
@@ -195,7 +201,7 @@ fprintf('[3] Histplot klassisch (einfärbig, Magnitude or Intensity)  \n');
 fprintf('[4] Statistik (mit Vergleich zu Mittlerer Periode, Wiederkehrperiode (ab 1900)) \n');
 fprintf('[5] Maximum Magnitude per Calendar Year (hist./1900-2000/<20years) \n');
 fprintf('[6] Temporal Statistics - Tagesgang etc. (hist./1900-2000/<20years) \n');
-fprintf('[7] write only List of Earthquakes (+KML) \n');
+fprintf('[7] write only List of Earthquakes (+KML, Histogram) \n');
 fprintf('[8] Analyze Phases \n');
 fprintf('[9] Plot waveforms \n');
 inp = input('>> Please select the option [q..quit]\n','s');
@@ -292,6 +298,7 @@ if setting.flag == 7 || setting.flag == 9 || setting.flag == 2
         inp = input('>> Please select the option [q..quit]\n','s');
         if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
             setting.eqlist.minmag = str2num(inp);
+            setting.eqlist.useinensities = 0;
         end
     end
     if setting.flag == 7
@@ -303,6 +310,13 @@ if setting.flag == 7 || setting.flag == 9 || setting.flag == 2
         inp = input('>> Please select the option [q..quit]\n','s');
         if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
             setting.eqlist.format = str2num(inp);
+        end
+        % mark to plot intensity if needed
+        switch setting.eqlist.format
+            case 3
+                setting.eqlist.useinensities = 1;
+            case 4
+                setting.eqlist.useinensities = 1;
         end
         fprintf('Specify the KML format: \n');
         fprintf('[0] no scale with symbol size             \n');
@@ -434,9 +448,9 @@ switch setting.flag
         %setting.title = 'Gesamte Auswertung mit dem Erdbebenschwarm Vogtland am 24/8 und 26/8/2011';
         setting.ylim = [0 20];  %at 850, emilia 140
         %setting.stacks = {-2 0 1 2 3 4};       %Magnitude/intensity classes - Austria
-        %setting.stacks = {0 1 2 3 4 5};       %Magnitude/intensity classes - Italy
+        setting.stacks = {0 1 2 3 4 5};       %Magnitude/intensity classes - Italy
         %setting.stacks = {0 1 2 3 4};       %gefühlte Magnitude/intensity classes - Austria
-        setting.stacks = {4 5 6 7 8};       %Magnitude/intensity classes - Makroseismik
+        %setting.stacks = {4 5 6 7 8};       %Magnitude/intensity classes - Makroseismik
         %setting.stacks = {-1 0 0.5 1 1.5 2};       %Magnitude/intensity classes - Schwaz
         setting.format.date = 'yyyy/mm/dd';
         setting.format.date1 = 'yyyy/mm/dd HH';
@@ -553,5 +567,8 @@ switch setting.flag
                 setting.labelx = 'Year';
             
         end
+    otherwise
+        setting.src.left = 5; setting.src.bottom = 5; setting.src.width = 1100; setting.src.height = 800;
+        
 end
 

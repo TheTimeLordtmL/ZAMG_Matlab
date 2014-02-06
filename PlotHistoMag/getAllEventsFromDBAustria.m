@@ -56,7 +56,16 @@ dbj1 = dbsubset(dbj,str_querry2);
 
 %join with meval and search 'felt' earthquakes
 if setting.filter.Felt == 1 || setting.eqlist.useinensities == 1
+    fprintf('[Try:] opening Antelope extension table meval. (if error, try to install CSS3.0 or newer on the machine where matlab runs)\n');
     dbmeval = dblookup(dbj1,'','meval','','');
+    n = dbnrecs(dbmeval);
+    if n<=0
+        fprintf('[error] Table meval not found in DB %s \n',curr_database);
+        t = toc;
+        data = []; datastruct = [];
+        return;
+    end
+    
     dbmevalj1 = dbjoin(dbj1,dbmeval);
     if setting.eqlist.useinensities == 1
         str_querryfelt = sprintf('(inull >= %3.1f && i_est != ''y'')',setting.eqlist.minintensity);
@@ -98,6 +107,7 @@ if n>0
     [data,datastruct,setting] = saveDBdata(timestr,timeflt,lat,lon,ml,etype,orid,depth,evname,inull,evid,setting);
 else
     t = toc;
+    data = []; datastruct = [];
     fprintf('NO EQ''s were extracted from %s (%4.1f s) (getAllEventsFromDBAustria.m)\n',curr_database,t);
     disp('You may need to specify another time span, DB or region.');
 end

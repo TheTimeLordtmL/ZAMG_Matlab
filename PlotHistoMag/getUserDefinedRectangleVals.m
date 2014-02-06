@@ -21,9 +21,18 @@ switch  optval
         Bmin = 47.21;          Bmax = 47.34;
         Lmin = 11.4;        Lmax = 11.65;    
     case 6  %  Ebreichsdorf
-        Bmin = 47.83;          Bmax = 48.03;
-        Lmin = 16.3;        Lmax = 16.54;          
-    case 9 
+        %Bmin = 47.83;          Bmax = 48.03; %etwa 8km  dB=0.2  dL=0.24
+        %Lmin = 16.3;        Lmax = 16.54;  
+        Bmin = 47.78;          Bmax = 48.15; %etwa 20km  dB=0.37  dL=0.55
+        Lmin = 16.12;        Lmax = 16.67;          
+    case 7  %  Seebenstein
+        %Bmin = 47.6314;          Bmax = 47.8052;  %etwa 8km   dB=0.17  dL=0.27
+        %Lmin = 16.0435;        Lmax = 16.3107;
+        Bmin = 47.527;          Bmax = 47.857;    %etwa 20km   dB=0.33  dL=0.55
+        Lmin = 15.90;        Lmax = 16.45; 
+    case 8  %  leer
+%        
+    case 9  %reserved
         switch setting.useshape.selectedLandgrenzen
             case 0
                 %  Austria close to (46.2/49.2/9.3/18)
@@ -58,6 +67,9 @@ switch  optval
                 Bmin = 47.25;        Bmax = 55.11;
                 Lmin = 5.81;         Lmax = 15.09;                
         end
+    case 11  %  Friaul
+        Bmin = 45.99;          Bmax = 46.52;    %etwa 30km   dB=0.53  dL=0.76
+        Lmin = 12.83;        Lmax = 13.59;         
     case 0
         inp = input('>> Enter the Value for Bmin e.g. 49.4 [q..quit]\n','s');
         if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
