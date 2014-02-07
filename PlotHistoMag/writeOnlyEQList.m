@@ -42,5 +42,6 @@ if setting.eqlist.showHistplot == 1
     showSimpleHistplotEQList(setting,datastructhist);
 end
 
+writeAMAPovlLayer(setting,datastructhist);
 
 

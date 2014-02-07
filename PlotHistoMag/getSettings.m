@@ -88,7 +88,7 @@ setting.felt.minintensity = 3.0;
 setting.felt.macroseismikfelstnumberfile = 'feltEQs_Makroseismik.txt';
 setting.felt.showFeltEQhisto = 0 ;%show felt eqarthquake histogramm and compare to data from macroseimsic lists
 
-%// write EQ list & KML
+%// write EQ list & KML & AMAP
 setting.eqlist.minmag = 0;      %minimal values for the magnitudes
 setting.eqlist.format = 1;      % evid orid date time ml etc.
 setting.eqlist.symbolrangeKML = 2;      % scale symbole of KML with Magnitude?
@@ -99,7 +99,18 @@ setting.eqlist.symbolsize = 0.5;
 setting.eqlist.showHistplot = 1;        %shows magnitude/intensity histogram
 setting.kml.symbolsizedepth.d = 0.3;
 setting.kml.symbolsizedepth.k = 0.04;
-
+%
+% width/heigth: 4 or 24,  color 3..blau, 6..weiss, 1..rot, 5..schwarz
+% text: 18 or 120
+% AMAP first circle 
+setting.eqlist.amap.plottwocircles = 1; setting.eqlist.amap.writeLabels = 1;  setting.eqlist.amap.coltxt = 5;
+setting.eqlist.amap.sizetxt = 100;
+setting.eqlist.amap.typ = 6;     setting.eqlist.amap.group = 1;   setting.eqlist.amap.width = 24; 
+setting.eqlist.amap.height = 24; setting.eqlist.amap.dir = 100;   setting.eqlist.amap.DimmF = 100; 
+setting.eqlist.amap.zoom = 1;    setting.eqlist.amap.size = 40;   setting.eqlist.amap.area = 2;
+setting.eqlist.amap.col = 5;     setting.eqlist.amap.ZoomFc = 50; setting.eqlist.amap.RefOn = 0;
+% AMAP second circle
+setting.eqlist.amap.col2 = 6; setting.eqlist.amap.width2 = 18; setting.eqlist.amap.height2 = 18; 
 
 %// analyze phases
 setting.phases.maximumdelta = 1.5;  % distance in degree
