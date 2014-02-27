@@ -75,9 +75,10 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
             strgeographregion = sprintf('Rectangle Österreich - Lat(%7.4f/%7.4f) Lon(%7.4f/%7.4f)',Bmin,Bmax,Lmin,Lmax);
         case 2
             setting.DB.userectangle = 1;  setting.useshape.useLandgrenzen = 0;
-            fprintf('[1] Emilia Romagna   [2] Vogtland    [3] Schwaz    [4] Molln   \n');
-            fprintf('[5] Hall            [6] Ebreichsdorf       [7] Seebenstein    [8] empty   [9] reserved \n');
-            fprintf('[10] empty            [11] Friaul       [12] empty    [13] empty   \n');
+            fprintf(' [1] Emilia Romagna   [2] Vogtland    [3] Schwaz      [4] Molln       [5] Hall      [6] Ebreichsdorf \n');
+            fprintf(' [7] Seebenstein      [8] Schwadorf  [x9] reserved   [10] Puchberg   [11] Obdach   [12] Katschberg   \n');
+            fprintf('[13] Riederberg      [14] empty      [15] empty      [16] empty      [17] empty    [18] empty \n');
+            fprintf('[20] Friaul          [21] empty      [22] empty      [23] empty   \n');
             fprintf('[0] User Input \n');
             inp2 = input('>> Please define the geographic region [q..quit]\n','s');
             if isnumeric(str2num(inp2)) && ~strcmp(inp2,'q')
@@ -102,13 +103,26 @@ if isnumeric(str2num(inp)) && ~strcmp(inp,'q')
                         strregion = 'Ebreichsdorf';    
                     case 7
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(7,setting);
-                        strregion = 'Seebenstein';    
+                        strregion = 'Seebenstein';
                     case 8
-                        %neue Region  
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(8,setting);
+                        strregion = 'Schwadorf';
                     case 9
-                        %reserved! see   getUserDefinedRectangleVals.m                     
+                        %reserved! see   getUserDefinedRectangleVals.m      
+                    case 10
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(10,setting);
+                        strregion = 'Puchberg';
                     case 11
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(11,setting);
+                        strregion = 'Obdach';
+                    case 12
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(12,setting);
+                        strregion = 'Katschberg';
+                    case 13
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(13,setting);
+                        strregion = 'Riederberg';                        
+                    case 20
+                        [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(20,setting);
                         strregion = 'Friaul';    
                     case 0
                         [Bmin,Bmax,Lmin,Lmax] = getUserDefinedRectangleVals(0,setting);
@@ -290,6 +304,11 @@ if setting.flag == 1 || setting.flag == 3
     end
 end
 
+% get the date of the last manuall input for the intensities
+if setting.filter.Felt == 1 || setting.eqlist.useinensities == 1
+   [timestr] = getLatestManuallIntensityFilledInAEC(setting); 
+end
+
 % flag==7
 if setting.flag == 7 || setting.flag == 9 || setting.flag == 2
     % ask for minimum magnitude (but not when felt EQ's are searched) 
@@ -425,7 +444,7 @@ end
 
 
 % // check if AEC is used when setting.filter.Felt = 1 is used
-if isempty(strfind(setting.DB.DBpath,'AEC')) & setting.filter.Felt == 1 
+if isempty(strfind(setting.DB.DBpath,'AEC')) && setting.filter.Felt == 1 
   setting.filter.Felt = 0;
   fprintf('..\n');
   fprintf('..Felt EQ''s can only be discriminated by this parameter when using the AEC catalog. (parameter setting.filter.Felt has been set to 0.)\n');

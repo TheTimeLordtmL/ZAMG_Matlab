@@ -11,14 +11,12 @@ dborigin = dbsubset(dborigin,str_querry1);
 n = dbnrecs(dborigin);
 if n>0
  [placename,lat,lon] = dbgetv(dborigin,'place','lat','lon');
- dbclose(db);
-
  %fprintf('%g Cities''s were extracted from %s. \n',n,setting.showAllEventsforaCity.europe_small_citiess);
 else
  nearestCity = [];
  fprintf('NO SIGNIFICANT Citie''s were extracted from %s. \n',setting.showAllEventsforaCity.europe_small_cities);
 end
-
+dbclose(db);
 
 if n>0
     %//sort by distance

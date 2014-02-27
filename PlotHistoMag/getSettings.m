@@ -16,9 +16,15 @@ setting.DB.readfromDB = 1;     %if eq's are read from a DB
 
 % time start/end - normal data
 %setting.time.start = '_2013-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; %schwaz
-%setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2014-01-01 00:00_'; 
-setting.time.start = '_2012-01-01 00:00_';  setting.time.end = '_2013-01-01 00:00_';
+setting.time.start = '_1000-01-01 00:00_';  setting.time.end = '_2014-04-01 00:00_'; 
+%setting.time.start = '_2012-01-01 00:00_';  setting.time.end = '_2013-01-01 00:00_';
 
+%setting.time.start = '_2000-03-01 00:00_';  setting.time.end = '_2000-10-01 00:00_';
+%setting.time.start = '_1590-01-01 00:00_';  setting.time.end ='_1592-08-01 00:00_';  %Riederberg 1590 (15.sep)
+%setting.time.start = '_1200-10-01 00:00_';  setting.time.end = '_1500-08-01 00:00_';  %katschberg 1201 (4.mai)
+%setting.time.start = '_1936-02-01 00:00_';  setting.time.end = '_1937-08-01 00:00_';  %obdach 1936 (3.okt)
+%setting.time.start = '_1939-02-01 00:00_';  setting.time.end = '_1940-06-01 00:00_';  %puchberg 1939 (18.sep)
+%setting.time.start = '_1927-06-01 00:00_';  setting.time.end = '_1928-06-01 00:00_';  %schwadorf 1927 (8.okt)
 %setting.time.start = '_1972-01-01 00:00_';  setting.time.end = '_1973-01-01 00:00_';  %seebenstein 1972 (16.4-apr)
 %setting.time.start = '_1938-09-01 00:00_';  setting.time.end = '_1939-07-01 00:00_';  %ebreichsdorf 1938 (8.11-nov)
 %setting.time.start = '_1976-01-01 00:00_';  setting.time.end = '_1977-04-01 00:00_';  %Friaul 1976 (6.5.-mai)
@@ -48,7 +54,7 @@ setting.DB.refDBpath = '/net/zagsun26/iscsi/homes/rt/antelope/bebenkatalog/AEC_c
 setting.filepath = 'ereignisse20042011AT.xyz';     
 
 setting.xticknumber = 9;   setting.fontsize = 17;  setting.fontsizeaxis = 16;  setting.fontsizetitle = 18;
-setting.temporalresolution = 'd';    %d..day   h..hour   m..month  j..jahr
+setting.temporalresolution = 'm';    %d..day   h..hour   m..month  j..jahr
 setting.plotInfoSubplot = 1;         % 0/1 outputs statistics on the figure bottom
 setting.plotAutoscaleOn = 1;         % 0/1 outputs statistics on the figure bottom
 setting.filter.UseTheFilter = 1;        %use the eType filter option? (km sm sr - etc.)

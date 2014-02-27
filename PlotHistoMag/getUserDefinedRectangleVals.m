@@ -30,8 +30,9 @@ switch  optval
         %Lmin = 16.0435;        Lmax = 16.3107;
         Bmin = 47.527;          Bmax = 47.857;    %etwa 20km   dB=0.33  dL=0.55
         Lmin = 15.90;        Lmax = 16.45; 
-    case 8  %  leer
-%        
+    case 8  %  Schwadorf
+        Bmin = 47.89;          Bmax = 48.255;    %etwa 20km   
+        Lmin = 16.30;        Lmax = 16.877;       
     case 9  %reserved
         switch setting.useshape.selectedLandgrenzen
             case 0
@@ -67,7 +68,19 @@ switch  optval
                 Bmin = 47.25;        Bmax = 55.11;
                 Lmin = 5.81;         Lmax = 15.09;                
         end
-    case 11  %  Friaul
+    case 10  %  Puchberg
+        Bmin = 47.5935;          Bmax = 47.9499;    %etwa 20km   
+        Lmin = 15.6389;        Lmax = 16.1887;       
+    case 11  %  Obdach
+        Bmin = 46.88;          Bmax = 47.266;    %etwa 20km   
+        Lmin = 14.419;        Lmax = 14.976;      
+    case 12  %  Katschberg
+        Bmin = 46.857;          Bmax = 47.250;    %etwa 20km   
+        Lmin = 13.322;        Lmax = 13.9199;    
+    case 13  %  Riederberg/nö
+        Bmin = 48.075;          Bmax = 48.445;    %etwa 20km   
+        Lmin = 15.784;        Lmax = 16.363;        
+    case 20  %  Friaul
         Bmin = 45.99;          Bmax = 46.52;    %etwa 30km   dB=0.53  dL=0.76
         Lmin = 12.83;        Lmax = 13.59;         
     case 0
